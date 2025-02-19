@@ -1,0 +1,170 @@
+"""This module handles serialisation adn deserialisation of LittleNavmap flight plans."""
+
+from pydantic import BaseModel, RootModel, Field, model_validator
+from typing import List, Optional
+import xmltodict
+from pathlib import Path
+
+
+# Define all models
+class Header(BaseModel):
+    FlightplanType: str
+    CruisingAlt: int
+    CruisingAltF: float
+    CreationDate: str
+    FileVersion: str
+    ProgramName: str
+    ProgramVersion: str
+    Documentation: str
+
+
+class SimData(RootModel[str]):
+    pass
+
+
+class NavDataValue(RootModel[str]):
+    pass
+
+
+class NavData(BaseModel):
+    Cycle: str = Field(alias="@Cycle")
+    Value: NavDataValue = Field(alias="#text")
+
+    class Config:
+        allow_population_by_field_name = True
+
+
+class AircraftPerformance(BaseModel):
+    FilePath: str
+    Type: str
+    Name: str
+
+
+class Pos(BaseModel):
+    Lon: float = Field(alias="@Lon")
+    Lat: float = Field(alias="@Lat")
+    Alt: float = Field(alias="@Alt")
+
+
+class Waypoint(BaseModel):
+    Name: Optional[str] = None
+    Ident: str
+    Type: str
+    Region: Optional[str] = None
+    Comment: Optional[str] = None
+    Pos: Pos
+
+
+class Flightplan(BaseModel):
+    Header: Header
+    SimData: SimData
+    NavData: NavData
+    AircraftPerformance: AircraftPerformance
+    Waypoints: List[Waypoint]
+
+    # Updated Pydantic validator to handle nested Waypoints structure
+    @model_validator(mode="before")
+    def unwrap_waypoints(cls, values):
+        """
+        Handle 'Waypoints' if it's a dictionary with a nested 'Waypoint' key.
+        """
+        waypoints = values.get("Waypoints")
+        # Check if Waypoints is a dictionary containing 'Waypoint'
+        if isinstance(waypoints, dict) and "Waypoint" in waypoints:
+            # Assign the nested list of waypoint dictionaries
+            values["Waypoints"] = waypoints["Waypoint"]
+        elif waypoints is None:
+            # If Waypoints key is missing or None, set it to an empty list
+            values["Waypoints"] = []
+        return values
+
+    @classmethod
+    def read(cls, file_path: Path) -> "Flightplan":
+        """
+        Create an instance of Flightplan from an XML file.
+
+        Args:
+            file_path (str): Path to the XML file.
+
+        Returns:
+            Flightplan: Instance of Flightplan initialized with the contents of the file.
+        """
+        # Ensure the file exists
+        if not file_path.exists():
+            raise FileNotFoundError(f"The file {file_path} does not exist.")
+
+        # Parse the XML file
+        with file_path.open("r", encoding="utf-8") as file:
+            try:
+                xml_data = xmltodict.parse(file.read())
+            except Exception as e:
+                raise ValueError(f"Failed to parse the XML file: {e}")
+
+        # Navigate to the Flightplan structure in the XML
+        flightplan_data = xml_data.get("LittleNavmap", {}).get("Flightplan", {})
+        if not flightplan_data:
+            raise ValueError("The XML does not contain a valid Flightplan structure.")
+
+        # Create and return the Flightplan instance
+        return cls.model_validate(flightplan_data)
+
+    def write(self, file_path: Path) -> None:
+        """
+        Write the XML file to disk.
+
+        :param file_path:
+        :return: None
+        """
+        serialized_xml = serialize_to_xml(self)
+        with open(file_path, "w") as f:
+            try:
+                f.write(serialized_xml)
+            except Exception as e:
+                raise ValueError(f"Failed to write the XML file: {e}")
+
+
+class LittleNavmap(BaseModel):
+    xmlns_xsi: Optional[str] = Field(alias="@xmlns:xsi")  # Map to `xmlns:xsi` attribute
+    xsi_noNamespaceSchemaLocation: Optional[str] = Field(
+        alias="@xsi:noNamespaceSchemaLocation"
+    )  # Map to `xsi:noNamespaceSchemaLocation` attribute
+    Flightplan: Flightplan
+
+
+# Serialization and XML handling
+def serialize_to_xml(model: BaseModel) -> str:
+    """
+    Serialize a Pydantic model back to an XML string.
+    """
+    # Convert Pydantic model to dictionary using aliases
+    model_dict = model.model_dump(by_alias=True)
+
+    # Handle Waypoints: Wrapping list as a single dictionary for serialization
+    flightplan = model_dict.get("Flightplan", {})
+    waypoints = flightplan.get("Waypoints", None)
+
+    if isinstance(waypoints, list):
+        flightplan["Waypoints"] = {
+            "Waypoint": waypoints
+        }  # Wrap into <Waypoints><Waypoint></Waypoint></Waypoints>
+
+    # Remove None values from the entire model dictionary
+    model_dict = remove_none_values(model_dict)
+
+    # Wrap everything in the root <LittleNavmap> tag
+    xml_dict = {"LittleNavmap": model_dict}
+
+    # Serialize back to XML
+    return xmltodict.unparse(xml_dict, pretty=True)
+
+
+def remove_none_values(obj):
+    """
+    Recursively remove keys with None values from a dictionary.
+    """
+    if isinstance(obj, dict):
+        return {k: remove_none_values(v) for k, v in obj.items() if v is not None}
+    elif isinstance(obj, list):
+        return [remove_none_values(v) for v in obj]
+    else:
+        return obj
