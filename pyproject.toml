@@ -1,0 +1,20 @@
+[project]
+name = "python-flightplan"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+    "pydantic>=2.10.6",
+    "xmltodict>=0.14.2",
+]
+
+[tool.ruff]
+format.quote-style = "double"
+format.docstring-code-format = true
+
+
+[dependency-groups]
+dev = [
+    "ruff>=0.9.6",
+]

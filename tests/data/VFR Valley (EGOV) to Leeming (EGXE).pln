@@ -1,0 +1,84 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<SimBase.Document Type="AceXML" version="1,0">
+    <Descr>AceXML Document</Descr>
+    <FlightPlan.FlightPlan>
+        <Title>EGOV to EGXE</Title>
+        <FPType>VFR</FPType>
+        <RouteType>Direct</RouteType>
+        <CruisingAlt>500</CruisingAlt>
+        <DepartureID>EGOV</DepartureID>
+        <DepartureLLA>N53° 14' 53.39",W4° 32' 7.20",+000036.00</DepartureLLA>
+        <DestinationID>EGXE</DestinationID>
+        <DestinationLLA>N54° 17' 33.09",W1° 32' 7.42",+000132.00</DestinationLLA>
+        <Descr>EGOV, EGXE created by Little Navmap 3.0.14</Descr>
+        <DepartureName>Valley</DepartureName>
+        <DestinationName>Leeming</DestinationName>
+        <AppVersion>
+            <AppVersionMajor>11</AppVersionMajor>
+            <AppVersionBuild>282174</AppVersionBuild>
+        </AppVersion>
+        <ATCWaypoint id="EGOV">
+            <ATCWaypointType>Airport</ATCWaypointType>
+            <WorldPosition>N53° 14' 53.39",W4° 32' 7.20",+000036.00</WorldPosition>
+            <ICAO>
+                <ICAOIdent>EGOV</ICAOIdent>
+            </ICAO>
+        </ATCWaypoint>
+        <ATCWaypoint id="EGNO">
+            <ATCWaypointType>Airport</ATCWaypointType>
+            <WorldPosition>N53° 44' 42.08",W2° 53' 0.38",+000500.00</WorldPosition>
+            <ICAO>
+                <ICAOIdent>EGNO</ICAOIdent>
+            </ICAO>
+        </ATCWaypoint>
+        <ATCWaypoint id="027 /">
+            <ATCWaypointType>User</ATCWaypointType>
+            <WorldPosition>N53° 49' 37.94",W2° 24' 43.15",+000500.00</WorldPosition>
+            <ICAO>
+                <ICAOIdent>027 /</ICAOIdent>
+            </ICAO>
+        </ATCWaypoint>
+        <ATCWaypoint id="070">
+            <ATCWaypointType>User</ATCWaypointType>
+            <WorldPosition>N53° 54' 11.25",W2° 20' 42.76",+000500.00</WorldPosition>
+            <ICAO>
+                <ICAOIdent>070</ICAOIdent>
+            </ICAO>
+        </ATCWaypoint>
+        <ATCWaypoint id="005 /">
+            <ATCWaypointType>User</ATCWaypointType>
+            <WorldPosition>N53° 57' 57.54",W2° 2' 38.82",+000500.00</WorldPosition>
+            <ICAO>
+                <ICAOIdent>005 /</ICAOIdent>
+            </ICAO>
+        </ATCWaypoint>
+        <ATCWaypoint id="341 /">
+            <ATCWaypointType>User</ATCWaypointType>
+            <WorldPosition>N54° 4' 43.42",W2° 1' 32.08",+000500.00</WorldPosition>
+            <ICAO>
+                <ICAOIdent>341 /</ICAOIdent>
+            </ICAO>
+        </ATCWaypoint>
+        <ATCWaypoint id="041 /">
+            <ATCWaypointType>User</ATCWaypointType>
+            <WorldPosition>N54° 12' 3.64",W2° 6' 1.52",+000500.00</WorldPosition>
+            <ICAO>
+                <ICAOIdent>041 /</ICAOIdent>
+            </ICAO>
+        </ATCWaypoint>
+        <ATCWaypoint id="090 /">
+            <ATCWaypointType>User</ATCWaypointType>
+            <WorldPosition>N54° 17' 46.65",W1° 57' 40.95",+000500.00</WorldPosition>
+            <ICAO>
+                <ICAOIdent>090 /</ICAOIdent>
+            </ICAO>
+        </ATCWaypoint>
+        <ATCWaypoint id="EGXE">
+            <ATCWaypointType>Airport</ATCWaypointType>
+            <WorldPosition>N54° 17' 33.09",W1° 32' 7.42",+000132.00</WorldPosition>
+            <ICAO>
+                <ICAOIdent>EGXE</ICAOIdent>
+            </ICAO>
+        </ATCWaypoint>
+    </FlightPlan.FlightPlan>
+</SimBase.Document>
