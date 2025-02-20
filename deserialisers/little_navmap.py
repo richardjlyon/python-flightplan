@@ -18,12 +18,20 @@ class Header(BaseModel):
     Documentation: str
 
 
-class SimData(RootModel[str]):
+class SimDataValue(RootModel[str]):
     pass
 
 
 class NavDataValue(RootModel[str]):
     pass
+
+
+class SimData(BaseModel):
+    Cycle: str = Field(alias="@Cycle")
+    Value: SimDataValue = Field(alias="#text")
+
+    class Config:
+        allow_population_by_field_name = True
 
 
 class NavData(BaseModel):
@@ -35,7 +43,7 @@ class NavData(BaseModel):
 
 
 class AircraftPerformance(BaseModel):
-    FilePath: str
+    FilePath: Optional[str] = None
     Type: str
     Name: str
 
@@ -45,6 +53,12 @@ class Pos(BaseModel):
     Lat: float = Field(alias="@Lat")
     Alt: float = Field(alias="@Alt")
 
+    class Config:
+        allow_population_by_field_name = True
+
+    def __repr__(self):
+        return f'Pos(**{{"@Lon": {self.Lon}, "@Lat": {self.Lat}, "@Alt": {self.Alt}}})'
+
 
 class Waypoint(BaseModel):
     Name: Optional[str] = None
@@ -53,6 +67,18 @@ class Waypoint(BaseModel):
     Region: Optional[str] = None
     Comment: Optional[str] = None
     Pos: Pos
+
+    def __repr__(self):
+        return (
+            f"Waypoint(\n"
+            f'    Name="{self.Name}",\n'
+            f'    Ident="{self.Ident}",\n'
+            f'    Type="{self.Type}",\n'
+            f"    Region={None if self.Region is None else '"' + self.Region + '"'},\n"
+            f"    Comment={None if self.Comment is None else '"' + self.Comment + '"'},\n"
+            f"    Pos={repr(self.Pos)},\n"
+            f")"
+        )
 
 
 class Flightplan(BaseModel):

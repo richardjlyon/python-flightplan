@@ -5,7 +5,7 @@ from pathlib import Path
 sys.path.insert(0, str(Path("/Users/richardlyon/Dev/python-flightplan")))
 
 
-def test_data_path() -> Path:
+def data_path() -> Path:
     current_dir = Path(__file__).parent
     test_file_path = current_dir / "tests" / "data"
 

@@ -4,19 +4,18 @@
     <Header>
       <FlightplanType>VFR</FlightplanType>
       <CruisingAlt>22000</CruisingAlt>
-      <CruisingAltF>22000.0</CruisingAltF>
-      <CreationDate>2025-02-18T16:37:34+00:00</CreationDate>
+      <CruisingAltF>22000.00000000</CruisingAltF>
+      <CreationDate>2025-02-20T07:49:48+00:00</CreationDate>
       <FileVersion>1.2</FileVersion>
       <ProgramName>Little Navmap</ProgramName>
       <ProgramVersion>3.0.14</ProgramVersion>
       <Documentation>https://www.littlenavmap.org/lnmpln.html</Documentation>
     </Header>
-    <SimData>MSFS</SimData>
+    <SimData Cycle="1801">NAVIGRAPH</SimData>
     <NavData Cycle="1801">NAVIGRAPH</NavData>
     <AircraftPerformance>
-      <FilePath>BAE Hawk.lnmperf</FilePath>
-      <Type>HAWK</Type>
-      <Name>Hawk </Name>
+      <Type>C172</Type>
+      <Name>Example Performance Profile</Name>
     </AircraftPerformance>
     <Waypoints>
       <Waypoint>
@@ -26,85 +25,79 @@
         <Pos Lon="-1.689722" Lat="55.038055" Alt="266.00"/>
       </Waypoint>
       <Waypoint>
-        <Ident>TOC 2:50</Ident>
-        <Type>USER</Type>
-        <Pos Lon="-1.849864" Lat="55.304138" Alt="2136.86"/>
-      </Waypoint>
-      <Waypoint>
         <Name>Saint Abbs</Name>
         <Ident>SAB</Ident>
         <Region>EG</Region>
         <Type>VOR</Type>
         <Comment>352
 7:51</Comment>
-        <Pos Lon="-2.206336" Lat="55.907513" Alt="6366.57"/>
-      </Waypoint>
-      <Waypoint>
-        <Ident>TOD 12:50</Ident>
-        <Type>USER</Type>
-        <Comment>SAB 351 / 16
-7 deg </Comment>
-        <Pos Lon="-2.314036" Lat="56.261662" Alt="8755.17"/>
+        <Pos Lon="-2.206336" Lat="55.907513" Alt="14759.34"/>
       </Waypoint>
       <Waypoint>
         <Name>Montrose</Name>
-        <Ident>255 / 17:20</Ident>
+        <Ident>LLEP</Ident>
         <Type>USER</Type>
-        <Pos Lon="-2.475614" Lat="56.705070" Alt="11762.74"/>
+        <Pos Lon="-2.475614" Lat="56.705070" Alt="22000.00"/>
       </Waypoint>
       <Waypoint>
         <Name>Forfar</Name>
-        <Ident>340 / 2:12</Ident>
+        <Ident>WP1</Ident>
         <Type>USER</Type>
-        <Pos Lon="-2.922450" Lat="56.632725" Alt="13464.78"/>
+        <Pos Lon="-2.922450" Lat="56.632725" Alt="22000.00"/>
       </Waypoint>
       <Waypoint>
         <Name>Crathie</Name>
-        <Ident>253 / 5:55</Ident>
+        <Ident>WP2</Ident>
         <Type>USER</Type>
-        <Pos Lon="-3.215497" Lat="57.040005" Alt="16375.24"/>
+        <Pos Lon="-3.215497" Lat="57.040005" Alt="22000.00"/>
       </Waypoint>
       <Waypoint>
         <Name>Beyond Braemar</Name>
-        <Ident>227 / 7:14</Ident>
+        <Ident>WP3</Ident>
         <Type>USER</Type>
-        <Pos Lon="-3.483008" Lat="56.991013" Alt="17396.99"/>
+        <Comment>227 / 7:14</Comment>
+        <Pos Lon="-3.483008" Lat="56.991013" Alt="22000.00"/>
       </Waypoint>
       <Waypoint>
         <Name>Tummel</Name>
-        <Ident>266 / 10:39</Ident>
+        <Ident>WP4</Ident>
         <Type>USER</Type>
-        <Pos Lon="-4.012328" Lat="56.707520" Alt="20091.10"/>
+        <Comment>266 / 10:39</Comment>
+        <Pos Lon="-4.012328" Lat="56.707520" Alt="22000.00"/>
       </Waypoint>
       <Waypoint>
         <Name>Rannoch</Name>
-        <Ident>345 / 12:39</Ident>
+        <Ident>WP5</Ident>
         <Type>USER</Type>
-        <Pos Lon="-4.431180" Lat="56.684898" Alt="21627.76"/>
+        <Comment>345 / 12:39</Comment>
+        <Pos Lon="-4.431180" Lat="56.684898" Alt="18896.31"/>
       </Waypoint>
       <Waypoint>
         <Name>Loch Ericht</Name>
-        <Ident>035 / 13:12</Ident>
+        <Ident>WP6</Ident>
         <Type>USER</Type>
-        <Pos Lon="-4.466886" Lat="56.747452" Alt="22000.00"/>
+        <Comment>035 / 13:12</Comment>
+        <Pos Lon="-4.466886" Lat="56.747452" Alt="17800.39"/>
       </Waypoint>
       <Waypoint>
         <Name>Dalwhinnie</Name>
-        <Ident>313 / 15:05</Ident>
+        <Ident>WP7</Ident>
         <Type>USER</Type>
-        <Pos Lon="-4.247161" Lat="56.932240" Alt="22000.00"/>
+        <Comment>313 / 15:05</Comment>
+        <Pos Lon="-4.247161" Lat="56.932240" Alt="14115.03"/>
       </Waypoint>
       <Waypoint>
         <Name>Fort Augustus</Name>
-        <Ident>036 / 17:45</Ident>
+        <Ident>WP8</Ident>
         <Type>USER</Type>
-        <Pos Lon="-4.674080" Lat="57.136242" Alt="22000.00"/>
+        <Comment>036 / 17:45</Comment>
+        <Pos Lon="-4.674080" Lat="57.136242" Alt="8946.24"/>
       </Waypoint>
       <Waypoint>
         <Ident>CI05</Ident>
         <Region>EG</Region>
         <Type>WAYPOINT</Type>
-        <Pos Lon="-4.328055" Lat="57.415260" Alt="15395.59"/>
+        <Pos Lon="-4.328055" Lat="57.415260" Alt="3330.10"/>
       </Waypoint>
       <Waypoint>
         <Name>Inverness</Name>
