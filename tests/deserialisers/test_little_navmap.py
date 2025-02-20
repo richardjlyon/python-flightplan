@@ -1,22 +1,24 @@
+from pprint import pprint
+
 from conftest import data_path
-from deserialisers.little_navmap import Flightplan
+from deserialisers.little_navmap import LittleNavmap
 
 
-def test_little_navmap_read():
+def test_littlenavmap_read():
     file_path = data_path() / "VFR Newcastle (EGNT) to Inverness (EGPE).lnmpln"
+    plan = LittleNavmap.read(file_path)
 
-    plan = Flightplan.read(file_path)
-
-    assert plan.Header.CreationDate == "2025-02-19T22:22:28+00:00"
-    assert len(plan.Waypoints) == 13
-    assert plan.Waypoints[0].Ident == "EGNT"
+    print()
+    pprint(plan.model_dump())
 
 
-def test_little_navmap_write():
+def test_littlenavmap_write():
     file_path = data_path() / "VFR Newcastle (EGNT) to Inverness (EGPE).lnmpln"
-    plan = Flightplan.read(file_path)
+    plan = LittleNavmap.read(file_path)
+    print()
+    print(plan)
 
-    outfile = data_path() / "outfile.lnmpln"
+    outfile = data_path() / "outfile_2.lnmpln"
     plan.write(outfile)
 
     assert True

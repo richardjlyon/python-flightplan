@@ -1,6 +1,6 @@
 """This module handles serialisation adn deserialisation of LittleNavmap flight plans."""
 
-from pydantic import BaseModel, RootModel, Field, model_validator
+from pydantic import BaseModel, RootModel, Field
 from typing import List, Optional
 import xmltodict
 from pathlib import Path
@@ -88,32 +88,24 @@ class Flightplan(BaseModel):
     AircraftPerformance: AircraftPerformance
     Waypoints: List[Waypoint]
 
-    # Updated Pydantic validator to handle nested Waypoints structure
-    @model_validator(mode="before")
-    def unwrap_waypoints(cls, values):
-        """
-        Handle 'Waypoints' if it's a dictionary with a nested 'Waypoint' key.
-        """
-        waypoints = values.get("Waypoints")
-        # Check if Waypoints is a dictionary containing 'Waypoint'
-        if isinstance(waypoints, dict) and "Waypoint" in waypoints:
-            # Assign the nested list of waypoint dictionaries
-            values["Waypoints"] = waypoints["Waypoint"]
-        elif waypoints is None:
-            # If Waypoints key is missing or None, set it to an empty list
-            values["Waypoints"] = []
-        return values
+
+class LittleNavmap(BaseModel):
+    xmlns_xsi: Optional[str] = Field(alias="@xmlns:xsi")  # Map to `xmlns:xsi` attribute
+    xsi_noNamespaceSchemaLocation: Optional[str] = Field(
+        alias="@xsi:noNamespaceSchemaLocation"
+    )  # Map to `xsi:noNamespaceSchemaLocation` attribute
+    Flightplan: Flightplan
 
     @classmethod
-    def read(cls, file_path: Path) -> "Flightplan":
+    def read(cls, file_path: Path) -> "LittleNavmap":
         """
-        Create an instance of Flightplan from an XML file.
+        Create an instance of LittleNavmap from an XML file.
 
         Args:
             file_path (str): Path to the XML file.
 
         Returns:
-            Flightplan: Instance of Flightplan initialized with the contents of the file.
+            LittleNavmap: Instance of LittleNavmap initialized with the contents of the file.
         """
         # Ensure the file exists
         if not file_path.exists():
@@ -126,13 +118,19 @@ class Flightplan(BaseModel):
             except Exception as e:
                 raise ValueError(f"Failed to parse the XML file: {e}")
 
-        # Navigate to the Flightplan structure in the XML
-        flightplan_data = xml_data.get("LittleNavmap", {}).get("Flightplan", {})
-        if not flightplan_data:
-            raise ValueError("The XML does not contain a valid Flightplan structure.")
+        # Process the parsed data
+        little_navmap_data = xml_data.get("LittleNavmap", {})
+
+        # Fix the nested "Waypoints" field if it exists
+        flightplan_data = little_navmap_data.get("Flightplan", {})
+        if (
+            "Waypoints" in flightplan_data
+            and "Waypoint" in flightplan_data["Waypoints"]
+        ):
+            flightplan_data["Waypoints"] = flightplan_data["Waypoints"]["Waypoint"]
 
         # Create and return the Flightplan instance
-        return cls.model_validate(flightplan_data)
+        return cls.model_validate(xml_data.get("LittleNavmap", {}))
 
     def write(self, file_path: Path) -> None:
         """
@@ -147,14 +145,6 @@ class Flightplan(BaseModel):
                 f.write(serialized_xml)
             except Exception as e:
                 raise ValueError(f"Failed to write the XML file: {e}")
-
-
-class LittleNavmap(BaseModel):
-    xmlns_xsi: Optional[str] = Field(alias="@xmlns:xsi")  # Map to `xmlns:xsi` attribute
-    xsi_noNamespaceSchemaLocation: Optional[str] = Field(
-        alias="@xsi:noNamespaceSchemaLocation"
-    )  # Map to `xsi:noNamespaceSchemaLocation` attribute
-    Flightplan: Flightplan
 
 
 # Serialization and XML handling

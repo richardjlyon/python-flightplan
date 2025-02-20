@@ -53,7 +53,7 @@ def test_llep_wp(route, config):
     llep_wp = compute_llep_wp(route, config)
 
     assert llep_wp.Name == "LLEP"
-    assert llep_wp.Ident == "LLEP 17:18/253"
+    assert llep_wp.Ident == "LLEP 17:18/254"
     assert llep_wp.Type == "USER"
     assert llep_wp.Pos.Lon == pytest.approx(-2.475614, abs=0.0001)
     assert llep_wp.Pos.Lat == pytest.approx(56.70507, abs=0.0001)

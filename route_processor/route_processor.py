@@ -103,7 +103,7 @@ def compute_toc_wp(route: List[Waypoint], config: ProcessorConfig) -> Waypoint:
     return Waypoint(
         Name="TOC",
         Ident=ident,
-        Type="User",
+        Type="USER",
         Pos=Pos(**{"@Lon": lon, "@Lat": lat, "@Alt": alt}),
     )
 
@@ -124,7 +124,7 @@ def compute_tod_wp(route: List[Waypoint], config: ProcessorConfig) -> Waypoint:
     return Waypoint(
         Name="TOD",
         Ident=ident,
-        Type="User",
+        Type="USER",
         Pos=Pos(**{"@Lon": lon, "@Lat": lat, "@Alt": alt}),
     )
 
