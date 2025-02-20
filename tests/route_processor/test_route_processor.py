@@ -75,7 +75,5 @@ def test_compute_route_wps(route, config):
 
 def test_process_route(route, config):
     processed_route_wps = process_route(route, config)
-    print()
 
-    for wp in processed_route_wps:
-        print(f"{wp.Name} : {wp.Ident}")
+    assert len(processed_route_wps) == 14

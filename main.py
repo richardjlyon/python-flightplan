@@ -1,5 +1,4 @@
 # Main parsing logic
-from pprint import pprint
 
 from conftest import data_path
 from deserialisers.little_navmap import LittleNavmap
@@ -16,16 +15,17 @@ def main():
     config = ProcessorConfig(id_entry=2, id_exit=-2)
     processed_route_wps = process_route(waypoints, config)
 
-    print()
-    for wp in processed_route_wps:
-        print(f"{wp.Name} : {wp.Ident}")
-
     # Create new plan
     plan.Flightplan.Waypoints = processed_route_wps
 
     # Save to disk
     outfile = data_path() / "processed.lnmpln"
     plan.write(outfile)
+
+    # Report
+    print()
+    for wp in processed_route_wps:
+        print(f"{wp.Name} : {wp.Ident}")
 
 
 if __name__ == "__main__":

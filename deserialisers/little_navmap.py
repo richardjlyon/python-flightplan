@@ -31,7 +31,7 @@ class SimData(BaseModel):
     Value: SimDataValue = Field(alias="#text")
 
     class Config:
-        allow_population_by_field_name = True
+        populate_by_name = True
 
 
 class NavData(BaseModel):
@@ -39,7 +39,7 @@ class NavData(BaseModel):
     Value: NavDataValue = Field(alias="#text")
 
     class Config:
-        allow_population_by_field_name = True
+        populate_by_name = True
 
 
 class AircraftPerformance(BaseModel):
@@ -54,7 +54,7 @@ class Pos(BaseModel):
     Alt: float = Field(alias="@Alt")
 
     class Config:
-        allow_population_by_field_name = True
+        populate_by_name = True
 
     def __repr__(self):
         return f'Pos(**{{"@Lon": {self.Lon}, "@Lat": {self.Lat}, "@Alt": {self.Alt}}})'
