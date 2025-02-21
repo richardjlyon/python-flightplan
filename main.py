@@ -12,7 +12,7 @@ def main():
 
     # Proces the route
     waypoints = plan.Flightplan.Waypoints
-    config = ProcessorConfig(id_entry=2, id_exit=-2)
+    config = ProcessorConfig(id_entry=3, id_exit=12)
     processed_route_wps = process_route(waypoints, config)
 
     # Create new plan
@@ -25,7 +25,9 @@ def main():
     # Report
     print()
     for wp in processed_route_wps:
-        print(f"{wp.Name} : {wp.Ident}")
+        print(
+            f"{wp.Name if wp.Name else 'None':15} : {wp.Ident:13} : {wp.Pos.Alt:05} : {wp.Comment}"
+        )
 
 
 if __name__ == "__main__":

@@ -1,79 +1,127 @@
 import pytest
 
-from route_processor.geo import Segment
 from route_processor.route_processor import (
-    compute_transit_fl,
-    compute_toc_wp,
-    compute_transit_segments,
-    compute_tod_wp,
-    compute_llep_wp,
+    _compute_transit_fl,
+    _compute_transit_segments,
     compute_route_wps,
-    process_route,
+    _compute_route_segments,
 )
 
 
-def test_compute_transit_segments(route, config):
-    transit_segments = compute_transit_segments(route, config.id_entry)
-    assert len(transit_segments) == 2
+class TestProcessedRoute:
+    def test_process_route(self, processed_route):
+        assert len(processed_route) == 14
+
+    def test_start_wp(self, processed_route):
+        start_wp = processed_route[0]
+
+        assert start_wp.Type == "USER"
+        assert start_wp.Name == "Newcastle"
+        assert start_wp.Ident == "0:00/342"
+        assert start_wp.Comment == "START"
+        assert start_wp.Pos.Alt == 266
+
+    def test_toc_wp(self, processed_route):
+        toc_wp = processed_route[1]
+
+        assert toc_wp.Type == "USER"
+        assert toc_wp.Name == "TOC"
+        assert toc_wp.Ident == "3:27/FL207 ↑"
+        assert toc_wp.Pos.Lon == pytest.approx(-1.8838, abs=0.0001)
+        assert toc_wp.Pos.Lat == pytest.approx(55.3647, abs=0.0001)
+        assert toc_wp.Pos.Alt == 20700
+
+    def test_transit(self, processed_route):
+        wp = processed_route[2]
+
+        assert wp.Type == "USER"
+        assert wp.Name == "Saint Abbs"
+        assert wp.Ident == "9:10/350"
+        assert wp.Pos.Lon == pytest.approx(-2.2063, abs=0.0001)
+        assert wp.Pos.Lat == pytest.approx(55.9075, abs=0.0001)
+        assert wp.Pos.Alt == 20700
+
+    def test_tod_wp(self, processed_route):
+        tod_wp = processed_route[3]
+
+        assert tod_wp.Type == "USER"
+        assert tod_wp.Name == "TOD"
+        assert tod_wp.Ident == "13:51/FL207 ↓"
+        assert tod_wp.Pos.Lon == pytest.approx(-2.3207, abs=0.0001)
+        assert tod_wp.Pos.Lat == pytest.approx(56.2463, abs=0.0001)
+        assert tod_wp.Pos.Alt == 20700
+
+    def test_llep_wp(self, processed_route):
+        llep_wp = processed_route[4]
+
+        assert llep_wp.Type == "USER"
+        assert llep_wp.Name == "Montrose"
+        assert llep_wp.Ident == "17:18/253 *"
+        assert llep_wp.Pos.Lon == pytest.approx(-2.475614, abs=0.0001)
+        assert llep_wp.Pos.Lat == pytest.approx(56.70507, abs=0.0001)
+        assert llep_wp.Pos.Alt == 500
+
+    @pytest.mark.parametrize(
+        "index, expected",
+        [
+            (5, {"Comment": "WP1", "Name": "Forfar", "Ident": "2:11/338"}),
+            (
+                6,
+                {
+                    "Comment": "WP2",
+                    "Name": "Crathie",
+                    "Ident": "5:56/251",
+                },
+            ),
+            (
+                7,
+                {
+                    "Comment": "WP3",
+                    "Name": "Beyond Braemar",
+                    "Ident": "7:16/225",
+                },
+            ),
+            (
+                12,
+                {
+                    "Comment": "WP8",
+                    "Name": "Fort Augustus",
+                    "Ident": "17:49/033",
+                },
+            ),
+            (
+                13,
+                {
+                    "Comment": "WP9",
+                    "Name": "None",
+                    "Ident": "20:42/049",
+                },
+            ),
+        ],
+    )
+    def test_compute_route_wps(self, processed_route, index, expected):
+        wp = processed_route[index]
+
+        assert wp.Name == expected["Name"]
+        assert wp.Ident == expected["Ident"]
+        assert wp.Comment == expected["Comment"]
 
 
-def test_compute_transit_fl(route, config):
-    transit_segments = [
-        Segment(route[0], route[1]),
-        Segment(route[1], route[2]),
-    ]
-    transit_fl = compute_transit_fl(transit_segments)
+class TestRouteProcessingUtilities:
+    def test_compute_transit_segments(self, route, config):
+        transit_segments = _compute_transit_segments(route, config.id_entry)
+        assert len(transit_segments) == 2
 
-    assert transit_fl == 207
+    def test_compute_transit_fl(self, route, config):
+        transit_segments = _compute_transit_segments(route, config.id_entry)
+        transit_fl = _compute_transit_fl(transit_segments)
 
+        assert transit_fl == 207
 
-def test_toc_wp(route, config):
-    toc_wp = compute_toc_wp(route, config)
+    def test_compute_route_segments(self, route, config):
+        route_segments = _compute_route_segments(route, config)
+        assert len(route_segments) == 10
 
-    assert toc_wp.Name == "TOC"
-    assert toc_wp.Ident == "TOC FL207/3:27"
-    assert toc_wp.Type == "USER"
-    assert toc_wp.Pos.Lon == pytest.approx(-1.8838, abs=0.0001)
-    assert toc_wp.Pos.Lat == pytest.approx(55.3647, abs=0.0001)
-    assert toc_wp.Pos.Alt == 20700.0
-
-
-def test_tod_wp(route, config):
-    tod_wp = compute_tod_wp(route, config)
-
-    assert tod_wp.Name == "TOD"
-    assert tod_wp.Ident == "TOD FL207/3:27"
-    assert tod_wp.Type == "USER"
-    assert tod_wp.Pos.Lon == pytest.approx(-2.3207, abs=0.0001)
-    assert tod_wp.Pos.Lat == pytest.approx(56.2463, abs=0.0001)
-    assert tod_wp.Pos.Alt == 20700.0
-
-
-def test_llep_wp(route, config):
-    llep_wp = compute_llep_wp(route, config)
-
-    assert llep_wp.Name == "LLEP"
-    assert llep_wp.Ident == "LLEP 17:18/254"
-    assert llep_wp.Type == "USER"
-    assert llep_wp.Pos.Lon == pytest.approx(-2.475614, abs=0.0001)
-    assert llep_wp.Pos.Lat == pytest.approx(56.70507, abs=0.0001)
-    assert llep_wp.Pos.Alt == 500.0
-
-
-def test_compute_route_wps(route, config):
-    route_wps = compute_route_wps(route, config)
-
-    wp1 = route_wps[0]
-
-    assert wp1.Name == "WP1"
-    assert wp1.Ident == "2:11/254"
-    assert wp1.Type == "USER"
-    assert wp1.Pos.Lon == pytest.approx(-2.475614, abs=0.0001)
-    assert wp1.Pos.Lat == pytest.approx(56.70507, abs=0.0001)
-    assert wp1.Pos.Alt == 500.0
-
-
-def test_process_route(route, config):
-    processed_route_wps = process_route(route, config)
-
-    assert len(processed_route_wps) == 14
+    def test_compute_route_wps(self, route, config):
+        route_wps = compute_route_wps(route, config)
+        assert len(route_wps) == 9

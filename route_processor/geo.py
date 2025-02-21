@@ -41,7 +41,7 @@ class Segment:
         return distance
 
     @property
-    def true_bearing(self) -> float:
+    def true_bearing(self) -> int:
         lat1, lon1, lat2, lon2 = map(
             math.radians,
             [
@@ -63,15 +63,15 @@ class Segment:
         bearing = math.degrees(bearing)
         bearing = (bearing + 360) % 360
 
-        return bearing % 360
+        return round(bearing % 360)
 
     @property
-    def magnetic_bearing(self) -> float:
+    def magnetic_bearing(self) -> int:
         avg_lat = (self.start.Pos.Lat + self.end.Pos.Lat) / 2
         avg_lon = (self.start.Pos.Lon + self.end.Pos.Lon) / 2
         declination = get_magnetic_declination(avg_lat, avg_lon)
 
-        return (self.true_bearing + declination) % 360
+        return round((self.true_bearing + declination) % 360)
 
     def travel_time_secs(self, speed_kts: float) -> float:
         return (self.length / speed_kts) * 3600

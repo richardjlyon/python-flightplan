@@ -1,6 +1,6 @@
 """This module handles serialisation adn deserialisation of LittleNavmap flight plans."""
 
-from pydantic import BaseModel, RootModel, Field
+from pydantic import BaseModel, RootModel, Field, field_validator
 from typing import List, Optional
 import xmltodict
 from pathlib import Path
@@ -51,13 +51,25 @@ class AircraftPerformance(BaseModel):
 class Pos(BaseModel):
     Lon: float = Field(alias="@Lon")
     Lat: float = Field(alias="@Lat")
-    Alt: float = Field(alias="@Alt")
+    Alt: int = Field(alias="@Alt")
 
     class Config:
         populate_by_name = True
 
-    def __repr__(self):
-        return f'Pos(**{{"@Lon": {self.Lon}, "@Lat": {self.Lat}, "@Alt": {self.Alt}}})'
+    @field_validator("Alt", mode="before")  # Transform the value before validation
+    def float_to_int(cls, value):
+        if isinstance(value, str):  # Handle string input
+            try:
+                value = float(value)  # Convert string to float first
+            except ValueError:
+                raise ValueError(f"Invalid value for Alt: {value}")
+        if isinstance(value, float):  # Convert float to int
+            return int(value)
+        return value
+
+
+def __repr__(self):
+    return f'Pos(**{{"@Lon": {self.Lon}, "@Lat": {self.Lat}, "@Alt": {self.Alt}}})'
 
 
 class Waypoint(BaseModel):

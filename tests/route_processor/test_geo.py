@@ -8,12 +8,12 @@ def test_length(montrose_to_forfar):
 
 def test_true_bearing(montrose_to_forfar):
     segment = montrose_to_forfar
-    assert segment.true_bearing == pytest.approx(253.7, abs=0.1)
+    assert segment.true_bearing == 254
 
 
 def test_magnetic_bearing(montrose_to_forfar):
     segment = montrose_to_forfar
-    assert segment.magnetic_bearing == pytest.approx(253.2, abs=0.1)
+    assert segment.magnetic_bearing == 253
 
 
 def test_travel_time(montrose_to_forfar):

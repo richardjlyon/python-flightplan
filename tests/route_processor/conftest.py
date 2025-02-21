@@ -143,7 +143,7 @@ def route():
 @pytest.fixture
 def config():
     """Fixture for a route processor config."""
-    return ProcessorConfig(id_entry=2, id_exit=-2)
+    return ProcessorConfig(id_entry=3, id_exit=12)
 
 
 @pytest.fixture
