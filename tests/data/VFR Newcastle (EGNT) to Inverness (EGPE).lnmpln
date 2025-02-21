@@ -5,7 +5,7 @@
       <FlightplanType>VFR</FlightplanType>
       <CruisingAlt>22000</CruisingAlt>
       <CruisingAltF>22000.00000000</CruisingAltF>
-      <CreationDate>2025-02-21T11:51:28+00:00</CreationDate>
+      <CreationDate>2025-02-21T12:00:23+00:00</CreationDate>
       <FileVersion>1.2</FileVersion>
       <ProgramName>Little Navmap</ProgramName>
       <ProgramVersion>3.0.14</ProgramVersion>
@@ -90,6 +90,7 @@
         <Ident>CI05</Ident>
         <Region>EG</Region>
         <Type>WAYPOINT</Type>
+        <Comment>ILS108.5/RW05</Comment>
         <Pos Lon="-4.328055" Lat="57.415260" Alt="3075.44"/>
       </Waypoint>
       <Waypoint>

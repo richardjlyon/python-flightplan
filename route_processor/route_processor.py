@@ -94,7 +94,7 @@ def compute_start_wp(route: List[Waypoint]) -> Waypoint:
 
     ident = f"0:00/{departure_bearing:03}"
 
-    start_wp.Type = "USER"
+    start_wp.Type = "WAYPOINT"
     start_wp.Ident = ident
     start_wp.Comment = "START"
     start_wp.Pos.Alt = start_wp.Pos.Alt
@@ -118,7 +118,7 @@ def compute_toc_wp(route: List[Waypoint], config: ProcessorConfig) -> Waypoint:
     ident = f"{_mins_secs_str(time_to_toc_secs)}/FL{transit_fl} ↑"
 
     return Waypoint(
-        Type="USER",
+        Type="WAYPOINT",
         Name="TOC",
         Ident=ident,
         Comment="TOC",
@@ -143,7 +143,7 @@ def compute_intermediate_transit_wp(
 
     wp = deepcopy(current_segment.end)
 
-    wp.Type = "USER"
+    wp.Type = "WAYPOINT"
     wp.Ident = ident
     wp.Comment = f"TP{wp_idx}"
     wp.Pos.Alt = transit_fl * 100
@@ -180,7 +180,7 @@ def compute_tod_wp(
     ident = f"{_mins_secs_str(tod_secs)}/FL{transit_fl} ↓"
 
     return Waypoint(
-        Type="USER",
+        Type="WAYPOINT",
         Name="TOD",
         Ident=ident,
         Comment="TOD",
@@ -202,7 +202,7 @@ def compute_llep_wp(route: List[Waypoint], config: ProcessorConfig) -> Waypoint:
 
     llep_wp = deepcopy(route[idx_entry])
 
-    llep_wp.Type = "USER"
+    llep_wp.Type = "WAYPOINT"
     llep_wp.Ident = f"{_mins_secs_str(transit_time_secs)}/{departure_brg:03} *"
     llep_wp.Comment = "LLEP"
     llep_wp.Pos.Alt = config.route_alt_ft
@@ -225,7 +225,7 @@ def compute_route_wps(route: List[Waypoint], config: ProcessorConfig) -> List[Wa
 
         wp = deepcopy(this_segment.end)
 
-        wp.Type = "USER"
+        wp.Type = "WAYPOINT"
         wp.Ident = f"{_mins_secs_str(cum_time_secs)}/{departure_brg:03}"
         wp.Comment = f"WP{wp_idx}"
         wp.Pos.Alt = config.route_alt_ft

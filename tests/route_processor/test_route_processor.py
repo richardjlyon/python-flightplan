@@ -15,7 +15,7 @@ class TestProcessedRoute:
     def test_start_wp(self, processed_route):
         start_wp = processed_route[0]
 
-        assert start_wp.Type == "USER"
+        assert start_wp.Type == "WAYPOINT"
         assert start_wp.Name == "Newcastle"
         assert start_wp.Ident == "0:00/342"
         assert start_wp.Comment == "START"
@@ -24,7 +24,7 @@ class TestProcessedRoute:
     def test_toc_wp(self, processed_route):
         toc_wp = processed_route[1]
 
-        assert toc_wp.Type == "USER"
+        assert toc_wp.Type == "WAYPOINT"
         assert toc_wp.Name == "TOC"
         assert toc_wp.Ident == "3:27/FL207 ↑"
         assert toc_wp.Pos.Lon == pytest.approx(-1.8838, abs=0.0001)
@@ -34,7 +34,7 @@ class TestProcessedRoute:
     def test_transit(self, processed_route):
         wp = processed_route[2]
 
-        assert wp.Type == "USER"
+        assert wp.Type == "WAYPOINT"
         assert wp.Name == "Saint Abbs"
         assert wp.Ident == "9:10/350"
         assert wp.Pos.Lon == pytest.approx(-2.2063, abs=0.0001)
@@ -44,7 +44,7 @@ class TestProcessedRoute:
     def test_tod_wp(self, processed_route):
         tod_wp = processed_route[3]
 
-        assert tod_wp.Type == "USER"
+        assert tod_wp.Type == "WAYPOINT"
         assert tod_wp.Name == "TOD"
         assert tod_wp.Ident == "13:51/FL207 ↓"
         assert tod_wp.Pos.Lon == pytest.approx(-2.3207, abs=0.0001)
@@ -54,7 +54,7 @@ class TestProcessedRoute:
     def test_llep_wp(self, processed_route):
         llep_wp = processed_route[4]
 
-        assert llep_wp.Type == "USER"
+        assert llep_wp.Type == "WAYPOINT"
         assert llep_wp.Name == "Montrose"
         assert llep_wp.Ident == "17:18/253 *"
         assert llep_wp.Pos.Lon == pytest.approx(-2.475614, abs=0.0001)
@@ -77,7 +77,7 @@ class TestProcessedRoute:
                 7,
                 {
                     "Comment": "WP3",
-                    "Name": "Beyond Braemar",
+                    "Name": "Braemar",
                     "Ident": "7:16/225",
                 },
             ),
@@ -93,7 +93,7 @@ class TestProcessedRoute:
                 13,
                 {
                     "Comment": "WP9",
-                    "Name": "None",
+                    "Name": None,
                     "Ident": "20:42/049",
                 },
             ),
