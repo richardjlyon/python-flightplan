@@ -1,8 +1,9 @@
 import pytest
 
-from deserialisers.little_navmap import Waypoint, Pos
-from route_processor.geo import Segment
-from route_processor.route_processor import ProcessorConfig, process_route
+from src.deserialisers.little_navmap import Waypoint, Pos
+from src.route_processor.geo import Segment
+from src.route_processor.route_processor import ProcessorConfig, process_route
+
 
 montrose = Waypoint(
     Name="Montrose",

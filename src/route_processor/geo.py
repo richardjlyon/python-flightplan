@@ -1,7 +1,7 @@
 import math
 from pygeomag import GeoMag
 
-from deserialisers.little_navmap import Waypoint
+from src.deserialisers.little_navmap import Waypoint
 
 geo_mag = GeoMag()
 

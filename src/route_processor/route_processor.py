@@ -9,8 +9,8 @@ import math
 from copy import deepcopy
 from typing import List, Tuple
 
-from deserialisers.little_navmap import Waypoint, Pos
-from route_processor.geo import Segment
+from src.deserialisers.little_navmap import Waypoint, Pos
+from src.route_processor.geo import Segment
 
 
 @dataclasses.dataclass

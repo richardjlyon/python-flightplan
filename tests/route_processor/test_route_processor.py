@@ -1,10 +1,10 @@
 import pytest
 
-from route_processor.route_processor import (
-    _compute_transit_fl,
+from src.route_processor.route_processor import (
     _compute_transit_segments,
-    compute_route_wps,
+    _compute_transit_fl,
     _compute_route_segments,
+    compute_route_wps,
 )
 
 

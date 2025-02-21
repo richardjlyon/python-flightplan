@@ -1,5 +1,5 @@
 from conftest import data_path
-from deserialisers.little_navmap import LittleNavmap
+from src.deserialisers.little_navmap import LittleNavmap
 
 
 def test_littlenavmap_read():
