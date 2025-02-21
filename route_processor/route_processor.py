@@ -5,6 +5,7 @@ and renames all waypoints to reflect arrival times and departure bearings
 """
 
 import dataclasses
+import math
 from copy import deepcopy
 from typing import List, Tuple
 
@@ -115,7 +116,7 @@ def compute_toc_wp(route: List[Waypoint], config: ProcessorConfig) -> Waypoint:
     lat, lon = _interpolate_lat_lon_flat(climb_segment, percent_of_leg)
     alt = int(transit_fl * 100.0)
 
-    ident = f"{_mins_secs_str(time_to_toc_secs)}/FL{transit_fl} ↑"
+    ident = f"{_mins_secs_str(time_to_toc_secs)}/FL{transit_fl}/TOC"
 
     return Waypoint(
         Type="WAYPOINT",
@@ -139,9 +140,11 @@ def compute_intermediate_transit_wp(
     departure_bearing = round(next_segment.true_bearing)
     segment_time_secs = current_segment.travel_time_secs(groundspeed_kts)
 
-    ident = f"{_mins_secs_str(cum_time_secs + segment_time_secs)}/{departure_bearing}"
-
     wp = deepcopy(current_segment.end)
+
+    ident = f"{_mins_secs_str(cum_time_secs + segment_time_secs)}/{departure_bearing}"
+    if wp.Comment is not None:
+        ident += f"/{wp.Comment}"
 
     wp.Type = "WAYPOINT"
     wp.Ident = ident
@@ -177,7 +180,7 @@ def compute_tod_wp(
     )
     tod_secs = segment_duration_secs - time_to_descend_secs + cum_transit_time_secs
 
-    ident = f"{_mins_secs_str(tod_secs)}/FL{transit_fl} ↓"
+    ident = f"{_mins_secs_str(tod_secs)}/FL{transit_fl}/TOD"
 
     return Waypoint(
         Type="WAYPOINT",
@@ -202,8 +205,12 @@ def compute_llep_wp(route: List[Waypoint], config: ProcessorConfig) -> Waypoint:
 
     llep_wp = deepcopy(route[idx_entry])
 
+    ident = f"{_mins_secs_str(transit_time_secs)}/{departure_brg:03}/LLEP"
+    if llep_wp.Comment is not None:
+        ident += f"/{llep_wp.Comment}"
+
     llep_wp.Type = "WAYPOINT"
-    llep_wp.Ident = f"{_mins_secs_str(transit_time_secs)}/{departure_brg:03} *"
+    llep_wp.Ident = ident
     llep_wp.Comment = "LLEP"
     llep_wp.Pos.Alt = config.route_alt_ft
 
@@ -225,8 +232,12 @@ def compute_route_wps(route: List[Waypoint], config: ProcessorConfig) -> List[Wa
 
         wp = deepcopy(this_segment.end)
 
+        ident = f"{_mins_secs_str(cum_time_secs)}/{departure_brg:03}"
+        if wp.Comment is not None:
+            ident += f"/{wp.Comment}"
+
         wp.Type = "WAYPOINT"
-        wp.Ident = f"{_mins_secs_str(cum_time_secs)}/{departure_brg:03}"
+        wp.Ident = ident
         wp.Comment = f"WP{wp_idx}"
         wp.Pos.Alt = config.route_alt_ft
 
@@ -253,10 +264,34 @@ def _compute_transit_segments(route: List[Waypoint], id_entry: int) -> List[Segm
 def _compute_transit_fl(transit_segments: List[Segment]) -> int:
     """Compute the transit flight level for the given transit segments."""
     transit_length = sum(segment.length for segment in transit_segments)
+    transit_bearing = _compute_transit_bearing(transit_segments)
+
     transit_fl = int(2 * transit_length)
-    # TODO Convert to an actual FL
+
+    # Ensure flight level is odd or even based on transit_bearing
+    if 0 <= transit_bearing < 180:  # Eastbound (odd FL)
+        transit_fl = transit_fl | 1  # Force odd flight level (bitwise OR with 1)
+    elif 180 <= transit_bearing < 360:  # Westbound (even FL)
+        transit_fl = (
+            transit_fl & ~1
+        )  # Force even flight level (bitwise AND with bitwise NOT of 1)
+
+    # Convert to an actual FL (round to nearest multiple of 10 and divide by 10)
+    transit_fl = (transit_fl // 10) * 10
 
     return transit_fl
+
+
+def _compute_transit_bearing(transit_segments: List[Segment]) -> int:
+    """Compute the transit bearing for the given transit segments."""
+    x = sum(
+        math.cos(math.radians(segment.true_bearing)) for segment in transit_segments
+    )
+    y = sum(
+        math.sin(math.radians(segment.true_bearing)) for segment in transit_segments
+    )
+
+    return int(math.degrees(math.atan2(y, x)) % 360)
 
 
 def _compute_route_segments(
