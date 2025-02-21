@@ -18,8 +18,6 @@ class ProcessorConfig:
     id_exit: int = 12  # Low Level Exit Point waypoint index
     climb_rate_ft_min: int = 6000  # Transit climb rate
     descent_rate_ft_min: int = 6000  # Transit descent rate
-    climb_goundspeed_kts: int = 360  # Transit climb groundspeed
-    descent_goundspeed_kts: int = 360  # Transit climb groundspeed
     transit_groundspeed_kts: int = 360  # Average transit groundspeed
     route_airspeed_kts: int = 420  # Target route airspeed
     route_alt_ft: int = 500  # Low Level Route altitude
@@ -110,7 +108,7 @@ def compute_toc_wp(route: List[Waypoint], config: ProcessorConfig) -> Waypoint:
     transit_segments = _compute_transit_segments(route, config.id_entry)
     transit_fl = _compute_transit_fl(transit_segments)
     time_to_toc_secs = 60 * transit_fl * 100 / config.climb_rate_ft_min
-    distance_to_toc_nm = time_to_toc_secs * config.climb_goundspeed_kts / 3600
+    distance_to_toc_nm = time_to_toc_secs * config.transit_groundspeed_kts / 3600
 
     climb_segment = transit_segments[0]
     percent_of_leg = distance_to_toc_nm / climb_segment.length
@@ -162,7 +160,9 @@ def compute_tod_wp(
     transit_segments = _compute_transit_segments(route, config.id_entry)
     transit_fl = _compute_transit_fl(transit_segments)
     time_to_descend_secs = 60 * transit_fl * 100 / config.descent_rate_ft_min
-    distance_to_descend_nm = time_to_descend_secs * config.descent_goundspeed_kts / 3600
+    distance_to_descend_nm = (
+        time_to_descend_secs * config.transit_groundspeed_kts / 3600
+    )
 
     # Compute TOD lat/lon
     descent_segment = transit_segments[-1]
@@ -173,7 +173,7 @@ def compute_tod_wp(
     # Compute TOD time
     # This is (segment_duration_secs - time_to_descend_secs) + cum_time_secs
     segment_duration_secs = descent_segment.travel_time_secs(
-        config.descent_goundspeed_kts
+        config.transit_groundspeed_kts
     )
     tod_secs = segment_duration_secs - time_to_descend_secs + cum_transit_time_secs
 

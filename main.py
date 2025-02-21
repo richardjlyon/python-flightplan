@@ -19,7 +19,7 @@ def main():
     plan.Flightplan.Waypoints = processed_route_wps
 
     # Save to disk
-    outfile = data_path() / "processed.lnmpln"
+    outfile = file_path.with_name(file_path.stem + " [formatted]" + file_path.suffix)
     plan.write(outfile)
 
     # Report
