@@ -50,7 +50,7 @@ entry point and the exit bearing from that waypoint._
 Python packaging is a fiasco. Here's how it's supposed to work. You
 have my sympathies.
 
-1. **Download this repository to your machine.** (_"Download Zip"_ from `<> Code` above)
+1. **Download the package to your machine.** It's under "Releases".
 
 2. **Make sure you have `pip` installed.**  Most Python installations
    include `pip` by default. You can check by running    `pip --version`
