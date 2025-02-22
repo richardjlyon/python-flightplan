@@ -16,7 +16,7 @@ dependencies = [
 ]
 
 [project.scripts]
-flightplan = "src.main:app"
+flightplan = "src.cli:app"
 
 [tool.setuptools]
 packages = ["src", "src.deserialisers", "src.route_processor", "src.utils"]

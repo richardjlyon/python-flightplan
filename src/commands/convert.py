@@ -6,18 +6,15 @@ from typing_extensions import Annotated
 from src.deserialisers.little_navmap import LittleNavmap
 from src.route_processor.route_processor import ProcessorConfig, process_route
 
-app = typer.Typer()
 
-
-@app.command()
 def convert(
-    file_path: Annotated[
-        Path, typer.Argument(help="The filepath of the file to convert")
-    ],
-    verbose: bool = False,
+        file_path: Annotated[
+            Path, typer.Argument(help="The filepath of the file to convert")
+        ],
+        verbose: bool = False,
 ):
     """Convert the given plan."""
-    print(f"Converting {file_path}")
+    print(f"\nConverting {file_path}")
 
     try:
         plan = LittleNavmap.read(file_path)
@@ -51,7 +48,3 @@ def convert(
             print(
                 f"{wp.Name if wp.Name else 'None':14} : {wp.Ident:15} : {wp.Pos.Alt:05} : {wp.Comment}"
             )
-
-
-if __name__ == "__main__":
-    app()
