@@ -39,7 +39,7 @@ def process_route(route: List[Waypoint], config: ProcessorConfig) -> List[Waypoi
         transit_fl = _compute_transit_fl(transit_segments)
         tp_idx = 1
         for current_segment, next_segment in zip(
-                transit_segments, transit_segments[1:]
+            transit_segments, transit_segments[1:]
         ):
             transit_wp, segment_time_secs = compute_intermediate_transit_wp(
                 current_segment,
@@ -117,12 +117,12 @@ def compute_toc_wp(route: List[Waypoint], config: ProcessorConfig) -> Waypoint:
 
 
 def compute_intermediate_transit_wp(
-        current_segment: Segment,
-        next_segment: Segment,
-        transit_fl: int,
-        wp_idx: int,
-        groundspeed_kts: int,
-        cum_time_secs: int,
+    current_segment: Segment,
+    next_segment: Segment,
+    transit_fl: int,
+    wp_idx: int,
+    groundspeed_kts: int,
+    cum_time_secs: int,
 ) -> Tuple[Waypoint, int]:
     """Compute an intermediate transit waypoint."""
 
@@ -144,7 +144,7 @@ def compute_intermediate_transit_wp(
 
 
 def compute_tod_wp(
-        route: List[Waypoint], cum_transit_time_secs: int, config: ProcessorConfig
+    route: List[Waypoint], cum_transit_time_secs: int, config: ProcessorConfig
 ) -> Waypoint:
     """Compute the waypoint of the Top Of Descent"""
 
@@ -153,7 +153,7 @@ def compute_tod_wp(
     transit_fl = _compute_transit_fl(transit_segments)
     time_to_descend_secs = 60 * transit_fl * 100 / config.descent_rate_ft_min
     distance_to_descend_nm = (
-            time_to_descend_secs * config.transit_groundspeed_kts / 3600
+        time_to_descend_secs * config.transit_groundspeed_kts / 3600
     )
 
     # Compute TOD lat/lon
@@ -262,7 +262,7 @@ def _compute_transit_fl(transit_segments: List[Segment]) -> int:
         transit_fl = transit_fl | 1  # Force odd flight level (bitwise OR with 1)
     elif 180 <= transit_bearing < 360:  # Westbound (even FL)
         transit_fl = (
-                transit_fl & ~1
+            transit_fl & ~1
         )  # Force even flight level (bitwise AND with bitwise NOT of 1)
 
     # Convert to an actual FL (round to nearest multiple of 10 and divide by 10)
@@ -284,7 +284,7 @@ def _compute_transit_bearing(transit_segments: List[Segment]) -> int:
 
 
 def _compute_route_segments(
-        route: List[Waypoint], config: ProcessorConfig
+    route: List[Waypoint], config: ProcessorConfig
 ) -> List[Segment]:
     """Compute the segments of the route from the config data."""
     segments = []

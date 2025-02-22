@@ -1,10 +1,6 @@
-from pathlib import Path
-
 import typer
-import toml
 
 from src import get_config_path
-from src.route_processor.processor_config import ProcessorConfig, serialize_to_toml_file
 
 
 def config():

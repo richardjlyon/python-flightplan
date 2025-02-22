@@ -116,8 +116,8 @@ The app is set up with the following parameters from cgiaviator's
 tutorial:
 
 - climb 300kts / M0.65
-- transit at a FL twice the range to the low level entry point
-- descend 360kts / M0.7
+- transit at M0.65 at a FL twice the range to the low level entry point
+- descend M0.8 / 360kts
 - fly low level route at 420 kts
 
 You can alter these in the configuration file as follows (run `> flightplan config` to locate the file):

@@ -21,8 +21,8 @@ class ProcessorConfig:
 
 # Function to serialize the dataclass to a TOML file
 def serialize_to_toml_file(
-        instance: dataclasses.dataclass,
-        file_path: Path,
+    instance: dataclasses.dataclass,
+    file_path: Path,
 ):
     data_dict = dataclasses.asdict(instance)
 
