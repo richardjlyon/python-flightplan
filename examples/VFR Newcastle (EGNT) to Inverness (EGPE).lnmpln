@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<LittleNavmap xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://www.littlenavmap.org/schema/lnmpln.xsd">
+  <Flightplan>
+    <Header>
+      <FlightplanType>VFR</FlightplanType>
+      <CruisingAlt>22000</CruisingAlt>
+      <CruisingAltF>22000.00000000</CruisingAltF>
+      <CreationDate>2025-02-21T12:00:23+00:00</CreationDate>
+      <FileVersion>1.2</FileVersion>
+      <ProgramName>Little Navmap</ProgramName>
+      <ProgramVersion>3.0.14</ProgramVersion>
+      <Documentation>https://www.littlenavmap.org/lnmpln.html</Documentation>
+    </Header>
+    <SimData Cycle="1801">NAVIGRAPH</SimData>
+    <NavData Cycle="1801">NAVIGRAPH</NavData>
+    <AircraftPerformance>
+      <Type>C172</Type>
+      <Name>Example Performance Profile</Name>
+    </AircraftPerformance>
+    <Waypoints>
+      <Waypoint>
+        <Name>Newcastle</Name>
+        <Ident>EGNT</Ident>
+        <Type>AIRPORT</Type>
+        <Pos Lon="-1.689722" Lat="55.038055" Alt="266.00"/>
+      </Waypoint>
+      <Waypoint>
+        <Name>Saint Abbs</Name>
+        <Ident>SAB</Ident>
+        <Region>EG</Region>
+        <Type>VOR</Type>
+        <Comment>112.5</Comment>
+        <Pos Lon="-2.206336" Lat="55.907513" Alt="14480.41"/>
+      </Waypoint>
+      <Waypoint>
+        <Name>Montrose</Name>
+        <Ident>LLEP</Ident>
+        <Type>USER</Type>
+        <Pos Lon="-2.475614" Lat="56.705070" Alt="22000.00"/>
+      </Waypoint>
+      <Waypoint>
+        <Name>Forfar</Name>
+        <Ident>WP1</Ident>
+        <Type>USER</Type>
+        <Pos Lon="-2.922450" Lat="56.632725" Alt="22000.00"/>
+      </Waypoint>
+      <Waypoint>
+        <Name>Crathie</Name>
+        <Ident>WP2</Ident>
+        <Type>USER</Type>
+        <Pos Lon="-3.215497" Lat="57.040005" Alt="22000.00"/>
+      </Waypoint>
+      <Waypoint>
+        <Name>Braemar</Name>
+        <Ident>WP3</Ident>
+        <Type>USER</Type>
+        <Pos Lon="-3.483008" Lat="56.991013" Alt="22000.00"/>
+      </Waypoint>
+      <Waypoint>
+        <Name>Tummel</Name>
+        <Ident>WP4</Ident>
+        <Type>USER</Type>
+        <Pos Lon="-4.012328" Lat="56.707520" Alt="21005.40"/>
+      </Waypoint>
+      <Waypoint>
+        <Name>Rannoch</Name>
+        <Ident>WP5</Ident>
+        <Type>USER</Type>
+        <Pos Lon="-4.431180" Lat="56.684898" Alt="17440.07"/>
+      </Waypoint>
+      <Waypoint>
+        <Name>Loch Ericht</Name>
+        <Ident>WP6</Ident>
+        <Type>USER</Type>
+        <Pos Lon="-4.466886" Lat="56.747452" Alt="16428.75"/>
+      </Waypoint>
+      <Waypoint>
+        <Name>Dalwhinnie</Name>
+        <Ident>WP7</Ident>
+        <Type>USER</Type>
+        <Pos Lon="-4.247161" Lat="56.932240" Alt="13027.86"/>
+      </Waypoint>
+      <Waypoint>
+        <Name>Fort Augustus</Name>
+        <Ident>WP8</Ident>
+        <Type>USER</Type>
+        <Pos Lon="-4.674080" Lat="57.136242" Alt="8258.06"/>
+      </Waypoint>
+      <Waypoint>
+        <Ident>CI05</Ident>
+        <Region>EG</Region>
+        <Type>WAYPOINT</Type>
+        <Comment>ILS108.5/RW05</Comment>
+        <Pos Lon="-4.328055" Lat="57.415260" Alt="3075.44"/>
+      </Waypoint>
+      <Waypoint>
+        <Name>Inverness</Name>
+        <Ident>EGPE</Ident>
+        <Type>AIRPORT</Type>
+        <Pos Lon="-4.047500" Lat="57.542500" Alt="31.00"/>
+      </Waypoint>
+    </Waypoints>
+  </Flightplan>
+</LittleNavmap>

@@ -132,7 +132,8 @@ route_alt_ft = 500
 
 ## Creating a base plan
 
-Here's how I set up a route before running the convertor:
+Here's how I set up a route before running the convertor. You'll find
+it in the `/examples` folder as `VFR Newcastle (EGNT) to Inverness (EGPE).lnmpln`:
 
 ![](/docs/images/lnmap-flight-plan.png)
 
@@ -156,6 +157,6 @@ options to increase the visibility of the waypoint info.
 
 ## Changelog
 
-0.1 Initial Release
+0.1.0 Initial Release
 
 
