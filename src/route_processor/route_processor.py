@@ -17,17 +17,18 @@ def process_route(route: List[Waypoint], config: ProcessorConfig) -> List[Waypoi
     """Add TOC/TOD waypoints and update WP Idents with nav info."""
     processed_wps = []
 
-    # Departure WP
-    start_wp = compute_start_wp(route)
+    # Generate transit segments
+    transit_segments = _compute_transit_segments(route, config.id_entry)
+    transit_fl = _compute_transit_fl(transit_segments)
+    cum_transit_time_secs = 0
+
+    # Start WP
+    start_wp = _compute_start_wp(transit_segments)
     processed_wps.append(start_wp)
 
     # TOC WP
     toc_wp = compute_toc_wp(route, config)
     processed_wps.append(toc_wp)
-
-    # Transit
-    transit_segments = _compute_transit_segments(route, config.id_entry)
-    cum_transit_time_secs = 0
 
     if len(transit_segments) == 1:
         segment = Segment(route[0], route[1])
@@ -36,7 +37,6 @@ def process_route(route: List[Waypoint], config: ProcessorConfig) -> List[Waypoi
         )
     else:
         # Intermediate transit WPs
-        transit_fl = _compute_transit_fl(transit_segments)
         tp_idx = 1
         for current_segment, next_segment in zip(
             transit_segments, transit_segments[1:]
@@ -72,24 +72,6 @@ def process_route(route: List[Waypoint], config: ProcessorConfig) -> List[Waypoi
     )
 
     return processed_wps
-
-
-def compute_start_wp(route: List[Waypoint]) -> Waypoint:
-    """Compute the start waypoint of the route."""
-    start_wp = deepcopy(route[0])
-    next_wp = deepcopy(route[1])
-    departure_segment = Segment(start_wp, next_wp)
-
-    departure_bearing = round(departure_segment.true_bearing)
-
-    ident = f"0:00/{departure_bearing:03}"
-
-    start_wp.Type = "WAYPOINT"
-    start_wp.Ident = ident
-    start_wp.Comment = "START"
-    start_wp.Pos.Alt = start_wp.Pos.Alt
-
-    return start_wp
 
 
 def compute_toc_wp(route: List[Waypoint], config: ProcessorConfig) -> Waypoint:
@@ -237,7 +219,7 @@ def compute_route_wps(route: List[Waypoint], config: ProcessorConfig) -> List[Wa
 
 
 def _compute_transit_segments(route: List[Waypoint], id_entry: int) -> List[Segment]:
-    """Compute the segments of the climb from the config data"""
+    """Compute the transit segments from the waypoints and config data"""
     idx_entry = id_entry - 1
 
     if idx_entry < 0 or idx_entry >= len(route):
@@ -269,6 +251,23 @@ def _compute_transit_fl(transit_segments: List[Segment]) -> int:
     transit_fl = (transit_fl // 10) * 10
 
     return transit_fl
+
+
+def _compute_start_wp(transit: List[Segment]) -> Waypoint:
+    """Compute the start waypoint of the route."""
+    departure_segment = transit[0]
+    departure_bearing = round(departure_segment.true_bearing)
+
+    ident = f"0:00/{departure_bearing:03}"
+
+    start_wp = deepcopy(departure_segment.start)
+
+    start_wp.Type = "WAYPOINT"
+    start_wp.Ident = ident
+    start_wp.Comment = "START"
+    start_wp.Pos.Alt = start_wp.Pos.Alt
+
+    return start_wp
 
 
 def _compute_transit_bearing(transit_segments: List[Segment]) -> int:
