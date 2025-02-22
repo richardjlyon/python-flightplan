@@ -3,31 +3,32 @@
 **A python script for generating a military-style low level navigation
 plan and map info.**
 
-Flying low level is demanding. In a real fast jet, you'll have an
-annotated map in your hand with arrival times and departure bearings for each
-waypoint. You can glance at it without flying the jet into the
-ground. How can we replicate this in VR in MSFS?
+Flying flight simulator planned low level routes in VR is demanding. In a real fast jet, you'll have an
+annotated map in your hand with arrival times and departure bearings
+for each waypoint. You can glance at it without flying the jet into the
+ground. How can we replicate this in VR in a flight simulator?
 
 One solution is to use the freeware application [Little
 Navmap](https://albar965.github.io/littlenavmap.html). Waypoint `ident`
-metadata can be configured to display relevant waypoint info on the map. But
-formatting the information in Little Navmap is quite tedious.
+metadata can be configured to display relevant waypoint info on the
+map. But formatting the information in _Little Navmap_ is quite tedious.
 
 Separately, in [this YouTube
 video](https://www.youtube.com/watch?v=L68ACL5_N24), cgiaviator
 explains a method for planning a medium to low level military style
 navigation sortie for the [Just Flight Hawk
 T1](https://www.justflight.com/product/hawk-t1a-advanced-trainer-microsoft-flight-simulator).
-Again. Again, quite tedious.
+Again, quite tedious.
 
 This python script takes as input a route planned in [Little
-Navmap](https://albar965.github.io/littlenavmap.html). It generates sortie
-planning information and waypoint labels to display the
-information, and creates a new _Little Navmap_ file with it. This can then
-be loaded into the cockpit via the
-[toolbar](https://github.com/bymaximus/msfs2020-toolbar-little-nav-map) and flown.
+Navmap](https://albar965.github.io/littlenavmap.html). It generates
+sortie planning information and waypoint labels to display the
+information, and creates a new _Little Navmap_ file with it. This can
+then be loaded into the cockpit via the
+[toolbar](https://github.com/bymaximus/msfs2020-toolbar-little-nav-map)
+and flown.
 
-Planning info includes:
+Planning info displayed on the map includes:
 
 - transit altitude
 - top of climb arrival time
@@ -37,26 +38,19 @@ Planning info includes:
 - waypoint departure bearing
 - miscellaneous info (e.g. VOR/ILS frequencies)
 
-![original](/docs/images/original.png)
-
 _Original_
-
-![processed](/docs/images/processed.png)
+![original](/docs/images/original.png)
 
 _Processed. Each waypoint shows the cumulative time from the low level
 entry point and the exit bearing from that waypoint._
+![processed](/docs/images/processed.png)
 
 ## Installation
 
-I'm not going to lie. I don't really understand python packaging. As
-far as I can tell, it's a fiasco. Anyway, here's how it's supposed to
-work:
+Python packaging is a fiasco. Here's how it's supposed to work. You
+have my sympathies.
 
-1. **Download this repository to your machine.**
-
-```aiignore
-> [insert command]
-```
+1. **Download this repository to your machine.** (_"Download Zip"_ from `<> Code` above)
 
 2. **Make sure you have `pip` installed.**  Most Python installations
    include `pip` by default. You can check by running    `pip --version`
@@ -72,10 +66,9 @@ work:
 > .venv\Scripts\activate     # On Windows    
 ```
 
-4. **Install the package using `pip`:**
+4. **Install the package using `pip`.** In the `/dist` folder:
 
 ```
-# in the `/dist` folder
 > pip install flightplan-0.1.0-py3-none-any.whl    
 ```
 
@@ -84,13 +77,7 @@ work:
 Getting help:
 
 ```aiignore 
-> flightplan --help
-```
-
-Configuring the app (see below):
-
-```aiignore
-> flightplan config --init
+> flightplan
 ```
 
 Running the app:
@@ -99,6 +86,7 @@ Running the app:
 > flightplan [path_to_little_navmap_plan] --verbose
 
 Converting /Users/richardlyon/Dev/python-flightplan/tests/data/VFR Newcastle (EGNT) to Inverness (EGPE).lnmpln
+...
 File written to /Users/richardlyon/Dev/python-flightplan/tests/data/VFR Newcastle (EGNT) to Inverness (EGPE) [processed].lnmpln
 
 Name           | Ident           | Alt   | Comment
@@ -119,42 +107,55 @@ Fort Augustus  : 17:49/033       : 00500 : WP8
 None           : 20:42/049/ILS108.5/RW05 : 00500 : WP9
 ```
 
-Load the version with the `[processed]` in the filename into Little Navmap and enjoy.
+Load the version with the `[processed]` in the filename into _Little
+Navmap_ and enjoy.
 
 ## Configuring the app
 
-The app is set up with the following parameters from cgiaviator's tutorial:
+The app is set up with the following parameters from cgiaviator's
+tutorial:
 
 - climb 300kts / M0.65
 - transit at a FL twice the range to the low level entry point
 - descend 360kts / M0.7
 - fly low level route at 420 kts
 
-You can alter these in the configuration as follows:
+You can alter these in the configuration file as follows (run `> flightplan config` to locate the file):
 
-## Initialising a plan
+```aiignore
+climb_rate_ft_min = 6000
+descent_rate_ft_min = 6000
+transit_groundspeed_kts = 360
+route_airspeed_kts = 420
+route_alt_ft = 500
+```
 
-Here's how I set up a route before running the convertor.
+## Creating a base plan
+
+Here's how I set up a route before running the convertor:
 
 ![](/docs/images/lnmap-flight-plan.png)
 
-You don't need to name the waypoints but, if you do, the names will appear in the table generated by the
-`--verbose` option, making it easier to check. Anything in the `Remarks`
-field is added to the displayed info. I use it for VOR/ILS frequencies, runways etc. Keep it short, though,
-as Little Navmap will truncate it at larger scales, which is quite annoying at 420 kts.
+You don't need to name the waypoints but, if you do, the names will
+appear during processing making it easier. Anything in the `Remarks`
+field is added to the displayed info. I use it for VOR/ILS frequencies,
+runways etc. Keep it short, though, as _Little Navmap_ will truncate it
+at larger scales, which is quite annoying at 420 kts/500'.
 
-Conversion supports multi-segment transits. In the configuration, use the waypoint number to
-specify the low level entry and exit points. In this example, I enter low level at Montrose, so
-the entry waypoint number is 3. I exit at ILN234013 - waypoint 12.
+During conversion, you'll be asked for low level entry and exit points.
+Conversion supports multi-segment transits. In this example, I enter
+low level at Montrose, so the entry waypoint number is 3. I exit at
+ILN234013 - waypoint 12.
 
 A future update will add fuel calculations.
 
 ## Tips
 
-In Little Navmap, play around with the `Map Flight Plan` formatting options to increase the visibility of
-the waypoint info.
+In Little Navmap, play around with the `Map Flight Plan` formatting
+options to increase the visibility of the waypoint info.
 
 ## Changelog
 
 0.1 Initial Release
+
 
