@@ -76,7 +76,7 @@ class MLCruisePerformanceData(BaseModel):
 
 
 def get_climb_descent_performance_data(
-        operation: JetOperation, flight_level: int
+    operation: JetOperation, flight_level: int
 ) -> ClimbDescentPerformanceData:
     df = load_df(operation)
 
@@ -97,7 +97,7 @@ def get_climb_descent_performance_data(
 
 
 def get_ll_cruise_performance_data(
-        operation: JetOperation, speed_kts: int
+    operation: JetOperation, speed_kts: int
 ) -> LLCruisePerformanceData:
     df = load_df(operation)
     df = df.sort_values(by="kts").reset_index(drop=True)
@@ -110,7 +110,7 @@ def get_ll_cruise_performance_data(
 
 
 def get_ml_cruise_performance_data(
-        operation: JetOperation, flight_level: int
+    operation: JetOperation, flight_level: int
 ) -> MLCruisePerformanceData:
     df = load_df(operation)
     df = df.sort_values(by="fl").reset_index(drop=True)

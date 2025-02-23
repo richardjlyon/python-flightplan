@@ -12,9 +12,7 @@ import toml
 class ProcessorConfig:
     id_entry: Optional[int] = None  # Low Level Entry Point waypoint index
     id_exit: Optional[int] = None  # Low Level Exit Point waypoint index
-    climb_rate_ft_min: int = 6000  # Transit climb rate
-    descent_rate_ft_min: int = 6000  # Transit descent rate
-    transit_groundspeed_kts: int = 360  # Average transit groundspeed
+    transit_groundspeed_kts: int = 495  # Average transit groundspeed @ M0.75
     route_airspeed_kts: int = 420  # Target route airspeed
     route_alt_ft: int = 500  # Low Level Route altitude
 
