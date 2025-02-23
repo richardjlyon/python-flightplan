@@ -137,7 +137,7 @@ class Pos(BaseModel):
         populate_by_name = True
 
     @field_validator("Alt", mode="before")  # Transform the value before validation
-    def float_to_int(cls, value):  # noqa: N805
+    def float_to_int(cls, value: float) -> int:  # noqa: N805
         """Validates and converts the altitude (Alt) value into an integer.
 
         This method processes the input value for the "Alt" field before any further validation, ensuring that
@@ -163,7 +163,7 @@ class Pos(BaseModel):
         return value
 
 
-def __repr__(self):  # noqa: N807
+def __repr__(self: Pos) -> str:  # noqa: N807
     return f'Pos(**{{"@Lon": {self.Lon}, "@Lat": {self.Lat}, "@Alt": {self.Alt}}})'
 
 
@@ -189,7 +189,7 @@ class Waypoint(BaseModel):
     Comment: str | None = None
     Pos: Pos
 
-    def __repr__(self):
+    def __repr__(self) -> str:
         """Provides a formatted string representation of the Waypoint instance.
 
         This method is primarily used for debugging and outputs all the attributes in
@@ -207,7 +207,7 @@ class Waypoint(BaseModel):
             f'    Type="{self.Type}",\n'
             f"    Region={None if self.Region is None else '"' + self.Region + '"'},\n"
             f"    Comment={None if self.Comment is None else '"' + self.Comment + '"'},\n"
-            f"    Pos={repr(self.Pos)},\n"
+            f"    Pos={self.Pos!r},\n"
             f")"
         )
 
@@ -330,7 +330,7 @@ def serialize_to_xml(model: BaseModel) -> str:
     return xmltodict.unparse(xml_dict, pretty=True)
 
 
-def remove_none_values(obj):
+def remove_none_values(obj: dict) -> dict:
     """Recursively remove keys with None values from a dictionary."""
     if isinstance(obj, dict):
         return {k: remove_none_values(v) for k, v in obj.items() if v is not None}

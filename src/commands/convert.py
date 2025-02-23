@@ -5,7 +5,7 @@ from typing import Annotated
 
 import typer
 
-from src.deserialisers.little_navmap import LittleNavmap
+from src.deserialisers.little_navmap import LittleNavmap, Waypoint
 from src.route_processor.route_processor import ProcessorConfig, process_route
 
 
@@ -22,8 +22,9 @@ def convert(
         int,
         typer.Option(help="Low level airspeed in knots"),
     ] = 420,
+    *,
     verbose: bool = False,
-):
+) -> None:
     """Converts the input flight plan file by processing defined routes and waypoints.
 
     Parameters:
@@ -60,7 +61,7 @@ def convert(
         report(processed_route_wps)
 
 
-def report(processed_route_wps):
+def report(processed_route_wps: list[Waypoint]) -> None:
     """Displays a detailed report of the processed waypoints.
 
     Parameters:
@@ -78,7 +79,7 @@ def report(processed_route_wps):
         )
 
 
-def save_to_disk(file_path, plan):
+def save_to_disk(file_path: Path, plan: LittleNavmap) -> None:
     """Saves the updated flight plan to disk.
 
     Parameters:
@@ -100,7 +101,7 @@ def save_to_disk(file_path, plan):
         raise typer.Exit(code=1) from e
 
 
-def load_plan(file_path):
+def load_plan(file_path: Path) -> LittleNavmap:
     """Reads and loads the flight plan file.
 
     Parameters:
@@ -121,7 +122,7 @@ def load_plan(file_path):
     return plan
 
 
-def get_entry_exit_ids(plan) -> tuple[int, int]:
+def get_entry_exit_ids(plan: LittleNavmap) -> tuple[int, int]:
     """Prompts the user to select entry and exit waypoint indices for route processing.
 
     Parameters:

@@ -23,3 +23,16 @@ extend-select = [
     "ERA", # eradicate
     "PL",  # Pylint
 ]
+
+
+
+"S" (flake8-bandit): This plugin checks for common security issues in Python code5.
+
+"ANN" (flake8-annotations): Enforces type annotation styles.
+
+"BLE" (flake8-blind-except): Checks for blind exceptions.
+
+"FBT" (flake8-boolean-trap): Identifies boolean trap anti-patterns.
+
+"G" (flake8-logging-format): Validates logging format strings.
+

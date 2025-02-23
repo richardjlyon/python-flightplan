@@ -146,11 +146,14 @@ def route():
 def config():
     """Fixture for a route processor config."""
     return ProcessorConfig(
-        id_entry=3, id_exit=12, route_airspeed_kts=420, transit_airspeed_kts=495,
+        id_entry=3,
+        id_exit=12,
+        route_airspeed_kts=420,
+        transit_airspeed_kts=495,
     )
 
 
 @pytest.fixture
-def processed_route(route, config):
+def processed_route(route: list[Waypoint], config: ProcessorConfig) -> list[Waypoint]:
     """Fixture for a processed route."""
     return process_route(route, config)

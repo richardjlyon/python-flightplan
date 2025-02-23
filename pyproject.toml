@@ -32,7 +32,6 @@ extend-select = [
     "UP", # pyupgrade
     "D", # pydocstyle
     "F", # Pyflakes
-    #    "E", # pycodestyle errors
     "W", # pycodestyle warnings
     "C90", # mccabe complexity
     "I", # isort
@@ -46,7 +45,23 @@ extend-select = [
     "PT", # flake8-pytest-style
     "RET", # flake8-return
     "SIM", # flake8-simplify
+    "ARG", # flake8-unused-arguments
+    "ERA", # eradicate
+    "RUF", #Ruff-specific rules
+    "S", #flake8-bandit
+    "ANN", #flake8-annotations
+    "BLE", # flake8-blind-except
+    "FBT", #flake8-boolean-trap
+    #    "E", # pycodestyle errors
 ]
+ignore = ["COM812"]
+
+
+
+
+[tool.ruff.lint.per-file-ignores]
+"tests/**/*.py" = ["S101", "ANN201", "ANN001"]  # Ignore S101 (`assert` usage) for all files in the tests/ directory
+
 
 [tool.ruff.lint.pydocstyle]
 convention = "google"

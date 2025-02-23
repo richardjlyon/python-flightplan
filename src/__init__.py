@@ -12,7 +12,7 @@ import typer
 app_name = "FlightPlan"
 
 
-def get_config_path(user_path: Path = None) -> Path:
+def get_config_path(user_path: Path | None = None) -> Path:
     """Return the location of the application configuration file.
 
     If a user-specified path is provided, it will use that path. Otherwise, it defaults

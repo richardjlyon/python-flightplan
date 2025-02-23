@@ -73,7 +73,7 @@ class Transit:
         intermediate_wps: list[Waypoint],
         tod_wp: Waypoint,
         end_wp: Waypoint,
-    ):
+    ) -> None:
         """Initializes an instance of the Transit class.
 
         This constructor sets up a transit segment by assigning the waypoints associated
@@ -215,7 +215,7 @@ class TransitBuilder:
         transit_groundspeed_kts: int,
         route_alt_ft: int,
         departure_bearing_mag: int,
-    ):
+    ) -> None:
         """Initializes the TransitBuilder class with transit configuration and required attributes.
 
         This constructor sets up the TransitBuilder by providing the transit segments, ground speed,
@@ -411,10 +411,10 @@ class TransitBuilder:
         ):
             has_climb = idx == 0
             transit_wp, segment_time_secs = self._compute_intermediate_waypoint(
-                has_climb,
-                this_segment,
-                next_segment,
-                cum_time_secs,
+                has_climb=has_climb,
+                this_segment=this_segment,
+                next_segment=next_segment,
+                cum_time_secs=cum_time_secs,
             )
             intermediate_wps.append(transit_wp)
             cum_time_secs += segment_time_secs
@@ -717,7 +717,11 @@ class TransitBuilder:
 
         return self.climb_performance_data.time_secs + transit_time_secs
 
-    def _compute_pos(self, performance_data, segment: Segment) -> Pos:
+    def _compute_pos(
+        self,
+        performance_data: ClimbDescentPerformanceData,
+        segment: Segment,
+    ) -> Pos:
         """Computes the position of a waypoint within a segment using performance data.
 
         This private method calculates the position (`Pos`) of a waypoint, such as
@@ -803,6 +807,7 @@ class TransitBuilder:
 
     def _compute_intermediate_waypoint(
         self,
+        *,
         has_climb: bool,
         this_segment: Segment,
         next_segment: Segment,

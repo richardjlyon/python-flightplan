@@ -5,14 +5,22 @@ and configuration management. Use `--help` with any command to explore its optio
 """
 
 import sys
+import warnings
 from pathlib import Path
-
-# Add the root project directory to sys.path because python is absurd
-sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 
 import typer
 
 from src.commands import convert
+
+# Suppress pandas warnings created by pydantic
+warnings.filterwarnings(
+    "ignore",
+    category=FutureWarning,
+    message="Calling float on a single element Series is deprecated",
+)
+
+# Add the root project directory to sys.path because python is absurd
+sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 
 app = typer.Typer(
     help="Use one of the commands below. Type [COMMAND] --help for more info.",
@@ -20,7 +28,7 @@ app = typer.Typer(
 
 
 @app.callback(invoke_without_command=True)
-def main(ctx: typer.Context):
+def main(ctx: typer.Context) -> None:
     """Show the help message if no command is provided.
 
     Args:

@@ -10,7 +10,7 @@ from src.deserialisers.little_navmap import Waypoint
 from src.route_processor.geo import Segment
 
 
-def interpolate_lat_lon_flat(segment: Segment, percent):
+def interpolate_lat_lon_flat(segment: Segment, percent: float) -> tuple[float, float]:
     """Interpolates a latitude and longitude along a segment using linear interpolation.
 
     This function computes an interpolated position (latitude and longitude) a certain
@@ -84,7 +84,7 @@ def interpolate_lat_lon_flat(segment: Segment, percent):
     return lat, lon
 
 
-def mins_secs_str(time_in_seconds) -> str:
+def mins_secs_str(time_in_seconds: int) -> str:
     """Converts a time duration from seconds into a string formatted as minutes and seconds.
 
     This function takes a time value in seconds and converts it into a string in the

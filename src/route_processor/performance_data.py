@@ -48,13 +48,18 @@ class ClimbDescentPerformanceData(BaseModel):
         description="Distance traveled in nautical miles; must be greater than 0.",
     )
     time_secs: int = Field(
-        ..., ge=0, description="Time taken in seconds; must be at least 0.",
+        ...,
+        ge=0,
+        description="Time taken in seconds; must be at least 0.",
     )
     fuel_kg: float = Field(
-        ..., ge=0, description="Fuel used in kilograms; must be at least 0.",
+        ...,
+        ge=0,
+        description="Fuel used in kilograms; must be at least 0.",
     )
     operation: JetOperation = Field(
-        ..., description="The type of operation, either 'CLIMB' or 'DESCENT'.",
+        ...,
+        description="The type of operation, either 'CLIMB' or 'DESCENT'.",
     )
 
     class Config:
@@ -83,10 +88,13 @@ class LLCruisePerformanceData(BaseModel):
     """Represents low level cruise performance data."""
 
     kg_min: float = Field(
-        ..., ge=0, description="Fuel consumption kg/min; must be at least 0.",
+        ...,
+        ge=0,
+        description="Fuel consumption kg/min; must be at least 0.",
     )
     operation: JetOperation = Field(
-        ..., description="The type of operation, either 'CLIMB' or 'DESCENT'.",
+        ...,
+        description="The type of operation, either 'CLIMB' or 'DESCENT'.",
     )
 
 
@@ -94,18 +102,24 @@ class MLCruisePerformanceData(BaseModel):
     """Represents medium level cruise performance data."""
 
     kg_min: float = Field(
-        ..., ge=0, description="Fuel consumption kg/min; must be at least 0.",
+        ...,
+        ge=0,
+        description="Fuel consumption kg/min; must be at least 0.",
     )
     kg_anm: float = Field(
-        ..., ge=0, description="Fuel consumption kg/anm; must be at least 0.",
+        ...,
+        ge=0,
+        description="Fuel consumption kg/anm; must be at least 0.",
     )
     operation: JetOperation = Field(
-        ..., description="The type of operation, either 'CLIMB' or 'DESCENT'.",
+        ...,
+        description="The type of operation, either 'CLIMB' or 'DESCENT'.",
     )
 
 
 def get_climb_descent_performance_data(
-    operation: JetOperation, flight_level: int,
+    operation: JetOperation,
+    flight_level: int,
 ) -> ClimbDescentPerformanceData:
     """Retrieves climb or descent performance data for a given operation and flight level.
 
@@ -168,7 +182,8 @@ def get_climb_descent_performance_data(
 
 
 def get_ll_cruise_performance_data(
-    operation: JetOperation, speed_kts: int,
+    operation: JetOperation,
+    speed_kts: int,
 ) -> LLCruisePerformanceData:
     """Retrieves low-level cruise performance data for a given operation and airspeed.
 
@@ -217,7 +232,8 @@ def get_ll_cruise_performance_data(
 
 
 def get_ml_cruise_performance_data(
-    operation: JetOperation, flight_level: int,
+    operation: JetOperation,
+    flight_level: int,
 ) -> MLCruisePerformanceData:
     """Retrieves mid-level cruise performance data for a given operation and flight level.
 
@@ -270,7 +286,7 @@ def get_ml_cruise_performance_data(
     )
 
 
-def load_df(operation):
+def load_df(operation: JetOperation) -> pd.DataFrame:
     """Loads performance data for a given operation from a CSV file.
 
     This function dynamically locates and loads the CSV file associated with the
@@ -337,7 +353,7 @@ def load_df(operation):
     return df
 
 
-def lookup_fl(df: pd.DataFrame, flight_level: int):
+def lookup_fl(df: pd.DataFrame, flight_level: int) -> pd.DataFrame:
     """Looks up or interpolates performance data for a specified flight level.
 
     The function retrieves the performance data corresponding to the given `flight_level`
@@ -392,7 +408,7 @@ def lookup_fl(df: pd.DataFrame, flight_level: int):
     if flight_level not in df["fl"].values:
         # Interpolate values for the missing flight level
         df = (
-            df.set_index("fl").reindex(df["fl"].tolist() + [flight_level]).sort_index()
+            df.set_index("fl").reindex([*df["fl"].tolist(), flight_level]).sort_index()
         )  # Add and sort index with the new flight level
         df = df.interpolate(method="linear", limit_direction="both").reset_index()
 
@@ -404,7 +420,7 @@ def lookup_fl(df: pd.DataFrame, flight_level: int):
     return result_row
 
 
-def lookup_kts(df: pd.DataFrame, speed_kts: int):
+def lookup_kts(df: pd.DataFrame, speed_kts: int) -> pd.DataFrame:
     """Looks up or interpolates performance data for a specified airspeed in knots.
 
     The function retrieves the performance data corresponding to the given `speed_kts`
@@ -457,8 +473,8 @@ def lookup_kts(df: pd.DataFrame, speed_kts: int):
     if speed_kts not in df["kts"].values:
         # Interpolate values for the missing airspeed
         df = (
-            df.set_index("kts").reindex(df["kts"].tolist() + [speed_kts]).sort_index()
-        )  # Add and sort index with the new flight level
+            df.set_index("kts").reindex([*df["kts"].tolist(), speed_kts]).sort_index()
+        )  # Add and sort index with the new airspeed
         df = df.interpolate(method="linear", limit_direction="both").reset_index()
 
     # Extract the row for the requested flight level
@@ -469,7 +485,7 @@ def lookup_kts(df: pd.DataFrame, speed_kts: int):
     return result_row
 
 
-def mmss_to_seconds(time_str):
+def mmss_to_seconds(time_str: str) -> int:
     """Converts a time string in "MM:SS" format to total seconds.
 
     The function parses a time string in the "MM:SS" format, where "MM" represents

@@ -5,6 +5,7 @@ It inserts TOC and BOD waypoints, and renames all waypoints to reflect arrival t
 
 import dataclasses
 from copy import deepcopy
+from itertools import pairwise
 
 from src.deserialisers.little_navmap import Waypoint
 from src.route_processor.geo import Segment
@@ -200,7 +201,8 @@ def process_route(route: list[Waypoint], config: ProcessorConfig) -> list[Waypoi
 
 
 def _compute_route_wps(
-    route: list[Waypoint], config: ProcessorConfig,
+    route: list[Waypoint],
+    config: ProcessorConfig,
 ) -> list[Waypoint]:
     """Compute the route waypoints."""
     route_wps = []
@@ -208,7 +210,7 @@ def _compute_route_wps(
     cum_time_secs = 0
     wp_idx = 1
 
-    for this_segment, next_segment in zip(segments, segments[1:], strict=False):
+    for this_segment, next_segment in pairwise(segments):
         segment_time_secs = this_segment.travel_time_secs(config.route_airspeed_kts)
         cum_time_secs += segment_time_secs
         departure_brg = next_segment.magnetic_bearing
@@ -231,7 +233,8 @@ def _compute_route_wps(
 
 
 def _compute_route_segments(
-    route: list[Waypoint], config: ProcessorConfig,
+    route: list[Waypoint],
+    config: ProcessorConfig,
 ) -> list[Segment]:
     """Compute the segments of the route from the config data."""
     segments = []

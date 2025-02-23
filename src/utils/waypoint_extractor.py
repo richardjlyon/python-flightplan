@@ -4,7 +4,7 @@ from conftest import data_path
 from src.deserialisers.little_navmap import LittleNavmap
 
 
-def process():
+def process() -> None:
     """Processes a flight plan file to extract and format waypoint information.
 
         This function reads a `.lnmpln` flight plan file from a predefined
@@ -66,16 +66,15 @@ def process():
     """
     file_path = data_path() / "VFR Newcastle (EGNT) to Inverness (EGPE).lnmpln"
     plan = LittleNavmap.read(file_path)
-    # print(plan.Flightplan.Waypoints)
 
     print(  # noqa: T201 - Simple utility
         ",\n".join(
             f"""Waypoint(
-        Name={repr(waypoint.Name)},
-        Ident={repr(waypoint.Ident)},
-        Type={repr(waypoint.Type)},
-        Region={repr(waypoint.Region)},
-        Comment={repr(waypoint.Comment)},
+        Name={waypoint.Name!r},
+        Ident={waypoint.Ident!r},
+        Type={waypoint.Type!r},
+        Region={waypoint.Region!r},
+        Comment={waypoint.Comment!r},
         Pos=Pos(**{{
             "@Lon": {waypoint.Pos.Lon},
             "@Lat": {waypoint.Pos.Lat},

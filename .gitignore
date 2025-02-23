@@ -3,3 +3,7 @@
 .idea
 build/
 *.egg-info
+
+examples/VFR Newcastle (EGNT) to Inverness (EGPE) \[processed\].lnmpln
+
+tests/data/VFR Newcastle (EGNT) to Inverness (EGPE) \[processed\].lnmpln
