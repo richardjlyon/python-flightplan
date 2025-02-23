@@ -3,28 +3,30 @@
 **A python script for generating a military-style low level navigation
 plan and map info.**
 
-Flying flight simulator planned low level routes in VR is demanding. In a real fast jet, you'll have an
-annotated map in your hand with arrival times and departure bearings
-for each waypoint. You can glance at it without flying the jet into the
-ground. How can we replicate this in VR in a flight simulator?
-
-One solution is to use the freeware application [Little
-Navmap](https://albar965.github.io/littlenavmap.html). Waypoint `ident`
-metadata can be configured to display relevant waypoint info on the
-map. But formatting the information in _Little Navmap_ is quite tedious.
-
-Separately, in [this YouTube
-video](https://www.youtube.com/watch?v=L68ACL5_N24), cgiaviator
-explains a method for planning a medium to low level military style
-navigation sortie for the [Just Flight Hawk
+In [this YouTube video](https://www.youtube.com/watch?v=L68ACL5_N24),
+cgiaviator explains a method for planning a military style medium
+transit to low level navigation sortie for the [Just Flight Hawk
 T1](https://www.justflight.com/product/hawk-t1a-advanced-trainer-microsoft-flight-simulator).
-Again, quite tedious.
+It's quite a laborious process.
 
-This python script takes as input a route planned in [Little
+Flying planned bad weather compass-and-stopwatch low level routes in
+flight simulator VR is demanding. In a real fast jet, you'll have an
+annotated map in your hand with clearly marked waypoint arrival times
+and departure bearings for each waypoint. You can glance at it without
+flying the jet into the ground. How can we replicate this in VR in a
+flight simulator? One solution is to use the freeware application
+[Little Navmap](https://albar965.github.io/littlenavmap.html). Waypoint
+`ident` metadata can be configured to display relevant waypoint info on
+the map. But formatting the information in _Little Navmap_ is quite
+tedious.
+
+This python script solves both problems. It takes as input a route
+planned in [Little
 Navmap](https://albar965.github.io/littlenavmap.html). It generates
-sortie planning information and waypoint labels to display the
-information, and creates a new _Little Navmap_ file with it. This can
-then be loaded into the cockpit via the
+sortie planning information using Hawk T1 performance data and planning
+rules of thumb. It labels waypoints with this information, and creates
+a new _Little Navmap_ file. This can then be loaded into the cockpit
+via the
 [toolbar](https://github.com/bymaximus/msfs2020-toolbar-little-nav-map)
 and flown.
 
@@ -80,7 +82,7 @@ Getting help:
 > flightplan
 ```
 
-Running the app:
+Converting a plan:
 
 ```
 > flightplan [path_to_little_navmap_plan] --verbose
@@ -112,27 +114,33 @@ Navmap_ and enjoy.
 
 ## Configuring the app
 
-The app is set up with the following parameters from cgiaviator's
-tutorial:
+Climb/descent planning uses Hawk T1 published _Normal Climb - 1200kg_ climb and _Nav_
+descent performance data. Cruise uses _ML Cruise 0.75M_ for transit and
+_LL Cruise_ for low level.
+
+This corresponds to:
 
 - climb 300kts / M0.65
-- transit at M0.65 at a FL twice the range to the low level entry point
+- transit at M0.75 at a FL twice the range to the low level entry point
 - descend M0.8 / 360kts
-- fly low level route at 420 kts
 
-You can alter these in the configuration file as follows (run `> flightplan config` to locate the file):
+![](/docs/images/hawk-performance-data.png)
+
+Default transit airspeed is 490 kts. To plan a different airspeed:
 
 ```aiignore
-climb_rate_ft_min = 6000
-descent_rate_ft_min = 6000
-transit_groundspeed_kts = 360
-route_airspeed_kts = 420
-route_alt_ft = 500
+> flightplan [path_to_little_navmap_plan] --transit-airspeed-kts 470
+```
+
+Default low level route airspeed is 420 kts. To plan a different airspeed:
+
+```aiignore
+> flightplan [path_to_little_navmap_plan] --route-airspeed-kts 300
 ```
 
 ## Creating a base plan
 
-Here's how I set up a route before running the convertor. You'll find
+Here's how I set up a route in _Little Navplan_ before running the convertor. You'll find
 it in the `/examples` folder as `VFR Newcastle (EGNT) to Inverness (EGPE).lnmpln`:
 
 ![](/docs/images/lnmap-flight-plan.png)
@@ -148,6 +156,10 @@ Conversion supports multi-segment transits. In this example, I enter
 low level at Montrose, so the entry waypoint number is 3. I exit at
 ILN234013 - waypoint 12.
 
+**CAUTION: I have NOT done any extensive testing for multi-segment transits.
+I suspect there are all sorts of edge cases e.g. segments that are shorter
+than combined climb/descent distances etc.**
+
 A future update will add fuel calculations.
 
 ## Tips
@@ -157,6 +169,7 @@ options to increase the visibility of the waypoint info.
 
 ## Changelog
 
-0.1.0 Initial Release
+**0.2.0** Implemented performance data  
+**0.1.0** Initial Release
 
 

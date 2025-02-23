@@ -4,12 +4,12 @@ inserts TOC and BOD waypoints,
 and renames all waypoints to reflect arrival times and departure bearings
 """
 
+import dataclasses
 from copy import deepcopy
 from typing import List
 
 from src.deserialisers.little_navmap import Waypoint
 from src.route_processor.geo import Segment
-from src.route_processor.processor_config import ProcessorConfig
 from src.route_processor.transit_planner import (
     _compute_transit_segments,
     TransitBuilder,
@@ -18,6 +18,15 @@ from src.route_processor.utils import mins_secs_str
 
 
 # --Public methods-----------------------------------------------------------------
+
+
+@dataclasses.dataclass
+class ProcessorConfig:
+    id_entry: int  # Low Level Entry Point waypoint index
+    id_exit: int  # Low Level Exit Point waypoint index
+    transit_airspeed_kts: int  # Average transit groundspeed @ M0.75
+    route_airspeed_kts: int  # Low level route airspeed (knots)
+    route_alt_ft: int = 500  # Low Level Route altitude
 
 
 def process_route(route: List[Waypoint], config: ProcessorConfig) -> List[Waypoint]:
@@ -32,7 +41,7 @@ def process_route(route: List[Waypoint], config: ProcessorConfig) -> List[Waypoi
     transit_segments = _compute_transit_segments(route, config.id_entry)
     builder = TransitBuilder(
         transit_segments,
-        config.transit_groundspeed_kts,
+        config.transit_airspeed_kts,
         config.route_alt_ft,
         departure_bearing_mag,
     )

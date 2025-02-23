@@ -1,6 +1,6 @@
 [project]
 name = "flightplan"
-version = "0.1.0"
+version = "0.2.0"
 description = "Military style low level navigation utility."
 authors = [
     { name = "Richard Lyon", email = "richlyon@fastmail.com" }
