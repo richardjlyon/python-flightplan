@@ -3,18 +3,18 @@
 import pytest
 
 from src.route_processor.performance_data import (
-    get_climb_descent_performance_data,
-    JetOperation,
     ClimbDescentPerformanceData,
-    get_ll_cruise_performance_data,
+    JetOperation,
     LLCruisePerformanceData,
-    get_ml_cruise_performance_data,
     MLCruisePerformanceData,
+    get_climb_descent_performance_data,
+    get_ll_cruise_performance_data,
+    get_ml_cruise_performance_data,
 )
 
 
 @pytest.mark.parametrize(
-    "operation, fl, expected",
+    ("operation", "fl", "expected"),
     [
         (
             JetOperation.NORMAL_CLIMB,
@@ -65,7 +65,7 @@ def test_climb_descent(operation, fl, expected):
 
 
 @pytest.mark.parametrize(
-    "operation, kts, expected",
+    ("operation", "kts", "expected"),
     [
         (
             JetOperation.LL_CRUISE,
@@ -100,7 +100,7 @@ def test_ll_cruise(operation, kts, expected):
 
 
 @pytest.mark.parametrize(
-    "operation, fl, expected",
+    ("operation", "fl", "expected"),
     [
         (
             JetOperation.ML_CRUISE,

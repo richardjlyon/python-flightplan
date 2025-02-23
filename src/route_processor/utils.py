@@ -155,10 +155,10 @@ def compute_departure_bearing(route: list[Waypoint], wp_id: int) -> int:
         int: The computed true bearing in degrees, rounded to the nearest integer.
 
     Calculation Details:
-        - Extracts the starting waypoint (`start_wp`) using `wp_id` and the next waypoint
-          (`end_wp`) using `wp_id + 1` from the route.
+        - Extracts the starting waypoint (`start_wp`) using `wp_id` and the next
+          waypoint (`end_wp`) using `wp_id + 1` from the route.
         - Creates a `Segment` from `start_wp` to `end_wp`.
-        - Computes the true bearing from the segment and rounds it to the nearest integer.
+        - Computes true bearing from the segment and rounds it to the nearest integer.
 
     Raises:
         IndexError: If `wp_id + 1` is out of bounds for the `route` list, i.e., there
@@ -166,7 +166,7 @@ def compute_departure_bearing(route: list[Waypoint], wp_id: int) -> int:
 
     Notes:
         - The function assumes the provided `route` has a valid sequence of waypoints.
-        - The bearing is calculated exactly for the segment between `wp_id` and `wp_id + 1`.
+        - The bearing is calculated for the segment between `wp_id` and `wp_id + 1`.
 
     Example:
         ```python

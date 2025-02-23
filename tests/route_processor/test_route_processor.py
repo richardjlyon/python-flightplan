@@ -16,7 +16,7 @@ class TestProcessedRoute:
         assert len(processed_route) == 14
 
     @pytest.mark.parametrize(
-        "index, expected",
+        ("index", "expected"),
         [
             (5, {"Comment": "WP1", "Name": "Forfar", "Ident": "2:11/338"}),
             (
@@ -66,11 +66,11 @@ class TestRouteProcessingUtilities:
     """Route processing utilities tests."""
 
     def test_compute_route_segments(self, route, config):
-        """Tests that the route processor generates the expected number of route segments."""
+        """Tests that it generates the expected number of route segments."""
         route_segments = _compute_route_segments(route, config)
         assert len(route_segments) == 10
 
     def test_compute_route_wps(self, route, config):
-        """Tests that the route processor generates the expected number of route waypoints."""
+        """Tests that it generates the expected number of route waypoints."""
         route_wps = _compute_route_wps(route, config)
         assert len(route_wps) == 9

@@ -1,23 +1,26 @@
 """The convert command."""
 
 from pathlib import Path
-
-import typer
 from typing import Annotated
 
+import typer
+
 from src.deserialisers.little_navmap import LittleNavmap
-from src.route_processor.route_processor import process_route, ProcessorConfig
+from src.route_processor.route_processor import ProcessorConfig, process_route
 
 
 def convert(
     file_path: Annotated[
-        Path, typer.Argument(help="The filepath of the file to convert")
+        Path,
+        typer.Argument(help="The filepath of the file to convert"),
     ],
     transit_airspeed_kts: Annotated[
-        int, typer.Option(help="Transit airspeed in knots")
+        int,
+        typer.Option(help="Transit airspeed in knots"),
     ] = 495,
     route_airspeed_kts: Annotated[
-        int, typer.Option(help="Low level airspeed in knots")
+        int,
+        typer.Option(help="Low level airspeed in knots"),
     ] = 420,
     verbose: bool = False,
 ):
@@ -66,12 +69,12 @@ def report(processed_route_wps):
     Returns:
         None
     """
-    print()
-    print(f"{'Name':<14} | {'Ident':<15} | {'Alt':<5} | {'Comment':<21}")
-    print("-" * 55)
+    typer.echo()
+    typer.echo(f"{'Name':<14} | {'Ident':<15} | {'Alt':<5} | {'Comment':<21}")
+    typer.echo("-" * 55)
     for wp in processed_route_wps:
-        print(
-            f"{wp.Name if wp.Name else 'None':14} : {wp.Ident:15} : {wp.Pos.Alt:05} : {wp.Comment}"
+        typer.echo(
+            f"{wp.Name if wp.Name else 'None':14} : {wp.Ident:15} : {wp.Pos.Alt:05} : {wp.Comment}",
         )
 
 
@@ -94,7 +97,7 @@ def save_to_disk(file_path, plan):
         typer.echo(f"File written to {outfile}")
     except Exception as e:
         typer.echo(f"Error writing file: {e}")
-        raise typer.Exit(code=1)
+        raise typer.Exit(code=1) from e
 
 
 def load_plan(file_path):
@@ -114,7 +117,7 @@ def load_plan(file_path):
 
     except Exception as e:
         typer.echo(f"Error reading file: {e}")
-        raise typer.Exit(code=1)
+        raise typer.Exit(code=1) from e
     return plan
 
 
@@ -131,12 +134,14 @@ def get_entry_exit_ids(plan) -> tuple[int, int]:
         The function validates user input to ensure values are within the range of available waypoint indices.
     """
     typer.echo("\nWaypoints in the plan:")
-    print(f"{'Index':<6} | {'Name':<14} | {'Ident':<15} | {'Alt':<5} | {'Comment':<21}")
-    print("-" * 70)
+    typer.echo(
+        f"{'Index':<6} | {'Name':<14} | {'Ident':<15} | {'Alt':<5} | {'Comment':<21}",
+    )
+    typer.echo("-" * 70)
 
     for index, wp in enumerate(plan.Flightplan.Waypoints, start=1):
-        print(
-            f"{index:<6} : {wp.Name if wp.Name else 'None':14} : {wp.Ident:15} : {wp.Pos.Alt:05} : {wp.Comment}"
+        typer.echo(
+            f"{index:<6} : {wp.Name if wp.Name else 'None':14} : {wp.Ident:15} : {wp.Pos.Alt:05} : {wp.Comment}",
         )
 
     max_index = len(plan.Flightplan.Waypoints)
@@ -172,9 +177,11 @@ def validate_index(value: str, min_value: int, max_value: int) -> int:
         number = int(value)
         if number < min_value or number > max_value:
             raise typer.BadParameter(
-                f"The number must be between {min_value} and {max_value}."
+                f"The number must be between {min_value} and {max_value}.",
             )
         return number
 
     except ValueError:
-        raise typer.BadParameter("Invalid number. Please enter a valid integer.")
+        raise typer.BadParameter(
+            "Invalid number. Please enter a valid integer.",
+        ) from None

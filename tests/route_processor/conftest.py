@@ -2,9 +2,9 @@
 
 import pytest
 
-from src.deserialisers.little_navmap import Waypoint, Pos
+from src.deserialisers.little_navmap import Pos, Waypoint
 from src.route_processor.geo import Segment
-from src.route_processor.route_processor import process_route, ProcessorConfig
+from src.route_processor.route_processor import ProcessorConfig, process_route
 
 montrose = Waypoint(
     Name="Montrose",
@@ -146,7 +146,7 @@ def route():
 def config():
     """Fixture for a route processor config."""
     return ProcessorConfig(
-        id_entry=3, id_exit=12, route_airspeed_kts=420, transit_airspeed_kts=495
+        id_entry=3, id_exit=12, route_airspeed_kts=420, transit_airspeed_kts=495,
     )
 
 

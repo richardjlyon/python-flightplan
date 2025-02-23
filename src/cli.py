@@ -15,7 +15,7 @@ import typer
 from src.commands import convert
 
 app = typer.Typer(
-    help="Use one of the commands below. Type [COMMAND] --help for more info."
+    help="Use one of the commands below. Type [COMMAND] --help for more info.",
 )
 
 

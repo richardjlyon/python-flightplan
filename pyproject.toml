@@ -31,6 +31,21 @@ format.docstring-code-format = true
 extend-select = [
     "UP", # pyupgrade
     "D", # pydocstyle
+    "F", # Pyflakes
+    #    "E", # pycodestyle errors
+    "W", # pycodestyle warnings
+    "C90", # mccabe complexity
+    "I", # isort
+    "N", # pep8-naming
+    "B", # flake8-bugbear
+    "A", # flake8-builtins
+    "COM", # flake8-commas
+    "C4", # flake8-comprehensions
+    "DTZ", # flake8-datetimez
+    "T20", # flake8-print
+    "PT", # flake8-pytest-style
+    "RET", # flake8-return
+    "SIM", # flake8-simplify
 ]
 
 [tool.ruff.lint.pydocstyle]

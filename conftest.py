@@ -8,8 +8,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 
 
 def data_path() -> Path:
-    """Get the path of the data directory used for test files."""
-    current_dir = Path(__file__).parent
-    test_file_path = current_dir / "tests" / "data"
+   """Get the path of the data directory used for test files."""
+   current_dir = Path(__file__).parent
 
-    return test_file_path
+   return current_dir / "tests" / "data"

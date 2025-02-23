@@ -7,42 +7,45 @@ from src.deserialisers.little_navmap import LittleNavmap
 def process():
     """Processes a flight plan file to extract and format waypoint information.
 
-    This function reads a `.lnmpln` flight plan file from a predefined path, deserializes it
-    using the `LittleNavmap` class, and formats each waypoint into a structured Python
-    representation. The extracted data is printed to the console.
+        This function reads a `.lnmpln` flight plan file from a predefined
+        path, deserializes it using the `LittleNavmap` class, and formats each
+        waypoint into a structured Python representation. The extracted data is
+        printed to the consol
+    e.
 
-    Steps:
-    ------
-    1. Locate the flight plan file using the `data_path` function.
-    2. Use the `LittleNavmap.read()` method to deserialize the flight plan into a `plan` object.
-    3. Iterate over the waypoints in the flight plan.
-    4. Format each waypoint with details such as:
-        - Name
-        - Identifier
-        - Type
-        - Region
-        - Comment (if any)
-        - Geographic position (`Lon`, `Lat`, `Alt`).
-    5. Print the formatted waypoints to the console as structured Python representations.
+        Steps:
+        ------
+        1. Locate the flight plan file using the `data_path` function.
+        2. Use the `LittleNavmap.read()` method to deserialize flight plan into a `plan`
+           object.
+        3. Iterate over the waypoints in the flight plan.
+        4. Format each waypoint with details such as:
+            - Name
+            - Identifier
+            - Type
+            - Region
+            - Comment (if any)
+            - Geographic position (`Lon`, `Lat`, `Alt`).
+        5. Print the formatted waypoints as structured Python representations.
 
-    Output Format:
-    --------------
-    Prints formatted waypoints in the following structure:
+        Output Format:
+        --------------
+        Prints formatted waypoints in the following structure:
 
-    ```python
-    Waypoint(
-        Name='Waypoint Name',
-        Ident='Identifier',
-        Type='Some Type',
-        Region='Some Region',
-        Comment='Optional Comment',
-        Pos=Pos(**{
-            "@Lon": <Longitude>,
-            "@Lat": <Latitude>,
-            "@Alt": <Altitude>
-        }),
-    ),
-    ```
+        ```python
+        Waypoint(
+            Name='Waypoint Name',
+            Ident='Identifier',
+            Type='Some Type',
+            Region='Some Region',
+            Comment='Optional Comment',
+            Pos=Pos(**{
+                "@Lon": <Longitude>,
+                "@Lat": <Latitude>,
+                "@Alt": <Altitude>
+            }),
+        ),
+        ```
 
     Notes:
     ------
@@ -52,12 +55,12 @@ def process():
 
     Example Usage:
     --------------
-    Running this function will produce the formatted output of all waypoints in a flight plan.
+    Running this produces the formatted output of all waypoints in a flight plan.
     Ensure that the `.lnmpln` file is placed in the directory defined by `data_path()`.
 
     Dependencies:
     -------------
-    - `data_path`: A function to locate the directory where the flight plan file is located.
+    - `data_path`: Locates the directory where the flight plan file is located.
     - `LittleNavmap`: A deserializer that reads `.lnmpln` files and converts them into
       Python objects for further processing.
     """
@@ -65,7 +68,7 @@ def process():
     plan = LittleNavmap.read(file_path)
     # print(plan.Flightplan.Waypoints)
 
-    print(
+    print(  # noqa: T201 - Simple utility
         ",\n".join(
             f"""Waypoint(
         Name={repr(waypoint.Name)},
@@ -80,7 +83,7 @@ def process():
         }}),
     )"""
             for waypoint in plan.Flightplan.Waypoints
-        )
+        ),
     )
 
 

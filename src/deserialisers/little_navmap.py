@@ -11,9 +11,10 @@ The primary purpose of this module is to enable structured and validated data ma
 for LittleNavmap flight planning software.
 """
 
-from pydantic import BaseModel, RootModel, Field, field_validator
-import xmltodict
 from pathlib import Path
+
+import xmltodict
+from pydantic import BaseModel, Field, RootModel, field_validator
 
 
 # Define all models
@@ -136,7 +137,7 @@ class Pos(BaseModel):
         populate_by_name = True
 
     @field_validator("Alt", mode="before")  # Transform the value before validation
-    def float_to_int(cls, value):
+    def float_to_int(cls, value):  # noqa: N805
         """Validates and converts the altitude (Alt) value into an integer.
 
         This method processes the input value for the "Alt" field before any further validation, ensuring that
@@ -156,13 +157,13 @@ class Pos(BaseModel):
             try:
                 value = float(value)  # Convert string to float first
             except ValueError:
-                raise ValueError(f"Invalid value for Alt: {value}")
+                raise ValueError(f"Invalid value for Alt: {value}") from None
         if isinstance(value, float):  # Convert float to int
             return int(value)
         return value
 
 
-def __repr__(self):
+def __repr__(self):  # noqa: N807
     return f'Pos(**{{"@Lon": {self.Lon}, "@Lat": {self.Lat}, "@Alt": {self.Alt}}})'
 
 
@@ -249,10 +250,10 @@ class LittleNavmap(BaseModel):
                                  and relevant metadata.
     """
 
-    xmlns_xsi: str | None = Field(alias="@xmlns:xsi")  # Map to `xmlns:xsi` attribute
-    xsi_noNamespaceSchemaLocation: str | None = Field(
-        alias="@xsi:noNamespaceSchemaLocation"
-    )  # Map to `xsi:noNamespaceSchemaLocation` attribute
+    xmlns_xsi: str | None = Field(alias="@xmlns:xsi")
+    xsi_noNamespaceSchemaLocation: str | None = Field(  # noqa: N815 - Name used for XML compatibility
+        alias="@xsi:noNamespaceSchemaLocation",
+    )
     Flightplan: Flightplan
 
     @classmethod
@@ -274,7 +275,7 @@ class LittleNavmap(BaseModel):
             try:
                 xml_data = xmltodict.parse(file.read())
             except Exception as e:
-                raise ValueError(f"Failed to parse the XML file: {e}")
+                raise ValueError(f"Failed to parse the XML file: {e}") from e
 
         # Process the parsed data
         little_navmap_data = xml_data.get("LittleNavmap", {})
@@ -301,7 +302,7 @@ class LittleNavmap(BaseModel):
             try:
                 f.write(serialized_xml)
             except Exception as e:
-                raise ValueError(f"Failed to write the XML file: {e}")
+                raise ValueError(f"Failed to write the XML file: {e}") from e
 
 
 # Serialization and XML handling
@@ -316,7 +317,7 @@ def serialize_to_xml(model: BaseModel) -> str:
 
     if isinstance(waypoints, list):
         flightplan["Waypoints"] = {
-            "Waypoint": waypoints
+            "Waypoint": waypoints,
         }  # Wrap into <Waypoints><Waypoint></Waypoint></Waypoints>
 
     # Remove None values from the entire model dictionary
@@ -333,7 +334,6 @@ def remove_none_values(obj):
     """Recursively remove keys with None values from a dictionary."""
     if isinstance(obj, dict):
         return {k: remove_none_values(v) for k, v in obj.items() if v is not None}
-    elif isinstance(obj, list):
+    if isinstance(obj, list):
         return [remove_none_values(v) for v in obj]
-    else:
-        return obj
+    return obj

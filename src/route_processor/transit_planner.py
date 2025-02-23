@@ -3,12 +3,12 @@
 import math
 from copy import deepcopy
 
-from src.deserialisers.little_navmap import Waypoint, Pos
+from src.deserialisers.little_navmap import Pos, Waypoint
 from src.route_processor.geo import Segment
 from src.route_processor.performance_data import (
-    get_climb_descent_performance_data,
-    JetOperation,
     ClimbDescentPerformanceData,
+    JetOperation,
+    get_climb_descent_performance_data,
 )
 from src.route_processor.utils import interpolate_lat_lon_flat, mins_secs_str
 
@@ -407,7 +407,7 @@ class TransitBuilder:
         cum_time_secs = 0
 
         for idx, (this_segment, next_segment) in enumerate(
-            zip(self.transit_segments, self.transit_segments[1:])
+            zip(self.transit_segments, self.transit_segments[1:], strict=False),
         ):
             has_climb = idx == 0
             transit_wp, segment_time_secs = self._compute_intermediate_waypoint(
@@ -468,7 +468,8 @@ class TransitBuilder:
         tod_time_secs = self._compute_tod_time_secs()
 
         pos = self._compute_pos(
-            self.descent_performance_data, self.transit_segments[-1]
+            self.descent_performance_data,
+            self.transit_segments[-1],
         )
 
         ident = f"{mins_secs_str(tod_time_secs)}/FL{self.flight_level}/TOD"
@@ -652,10 +653,12 @@ class TransitBuilder:
         # Convert to an actual FL (round to nearest multiple of 10 and divide by 10)
         self.flight_level = (transit_fl // 10) * 10
         self.climb_performance_data = get_climb_descent_performance_data(
-            JetOperation.NORMAL_CLIMB, self.flight_level
+            JetOperation.NORMAL_CLIMB,
+            self.flight_level,
         )
         self.descent_performance_data = get_climb_descent_performance_data(
-            JetOperation.NAV_DESCENT, self.flight_level
+            JetOperation.NAV_DESCENT,
+            self.flight_level,
         )
 
     def _compute_tod_time_secs(self) -> float:
@@ -711,8 +714,8 @@ class TransitBuilder:
             + self.descent_performance_data.distance_nm
         )
         transit_time_secs = 3600 * transit_distance_nm / self.transit_groundspeed_kts
-        tod_time_secs = self.climb_performance_data.time_secs + transit_time_secs
-        return tod_time_secs
+
+        return self.climb_performance_data.time_secs + transit_time_secs
 
     def _compute_pos(self, performance_data, segment: Segment) -> Pos:
         """Computes the position of a waypoint within a segment using performance data.
@@ -881,7 +884,7 @@ class TransitBuilder:
             segment_time_secs = cruise_time_secs + climb_time_secs
         else:
             segment_time_secs = int(
-                this_segment.travel_time_secs(self.transit_groundspeed_kts)
+                this_segment.travel_time_secs(self.transit_groundspeed_kts),
             )
 
         wp = deepcopy(this_segment.end)
@@ -1026,9 +1029,8 @@ def _compute_transit_fl(transit_segments: list[Segment]) -> int:
         )  # Force even flight level (bitwise AND with bitwise NOT of 1)
 
     # Convert to an actual FL (round to nearest multiple of 10 and divide by 10)
-    transit_fl = (transit_fl // 10) * 10
 
-    return transit_fl
+    return (transit_fl // 10) * 10
 
 
 def _compute_transit_bearing(transit_segments: list[Segment]) -> int:

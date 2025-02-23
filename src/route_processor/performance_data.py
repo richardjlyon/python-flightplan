@@ -1,11 +1,11 @@
 """Handles computing jet climb and descent performance for a given flight level."""
 
+import os
+from enum import Enum
 from pathlib import Path
 
-from pydantic import BaseModel, Field
-from enum import Enum
-import os
 import pandas as pd
+from pydantic import BaseModel, Field
 
 
 class JetOperation(Enum):
@@ -48,13 +48,13 @@ class ClimbDescentPerformanceData(BaseModel):
         description="Distance traveled in nautical miles; must be greater than 0.",
     )
     time_secs: int = Field(
-        ..., ge=0, description="Time taken in seconds; must be at least 0."
+        ..., ge=0, description="Time taken in seconds; must be at least 0.",
     )
     fuel_kg: float = Field(
-        ..., ge=0, description="Fuel used in kilograms; must be at least 0."
+        ..., ge=0, description="Fuel used in kilograms; must be at least 0.",
     )
     operation: JetOperation = Field(
-        ..., description="The type of operation, either 'CLIMB' or 'DESCENT'."
+        ..., description="The type of operation, either 'CLIMB' or 'DESCENT'.",
     )
 
     class Config:
@@ -83,10 +83,10 @@ class LLCruisePerformanceData(BaseModel):
     """Represents low level cruise performance data."""
 
     kg_min: float = Field(
-        ..., ge=0, description="Fuel consumption kg/min; must be at least 0."
+        ..., ge=0, description="Fuel consumption kg/min; must be at least 0.",
     )
     operation: JetOperation = Field(
-        ..., description="The type of operation, either 'CLIMB' or 'DESCENT'."
+        ..., description="The type of operation, either 'CLIMB' or 'DESCENT'.",
     )
 
 
@@ -94,18 +94,18 @@ class MLCruisePerformanceData(BaseModel):
     """Represents medium level cruise performance data."""
 
     kg_min: float = Field(
-        ..., ge=0, description="Fuel consumption kg/min; must be at least 0."
+        ..., ge=0, description="Fuel consumption kg/min; must be at least 0.",
     )
     kg_anm: float = Field(
-        ..., ge=0, description="Fuel consumption kg/anm; must be at least 0."
+        ..., ge=0, description="Fuel consumption kg/anm; must be at least 0.",
     )
     operation: JetOperation = Field(
-        ..., description="The type of operation, either 'CLIMB' or 'DESCENT'."
+        ..., description="The type of operation, either 'CLIMB' or 'DESCENT'.",
     )
 
 
 def get_climb_descent_performance_data(
-    operation: JetOperation, flight_level: int
+    operation: JetOperation, flight_level: int,
 ) -> ClimbDescentPerformanceData:
     """Retrieves climb or descent performance data for a given operation and flight level.
 
@@ -168,7 +168,7 @@ def get_climb_descent_performance_data(
 
 
 def get_ll_cruise_performance_data(
-    operation: JetOperation, speed_kts: int
+    operation: JetOperation, speed_kts: int,
 ) -> LLCruisePerformanceData:
     """Retrieves low-level cruise performance data for a given operation and airspeed.
 
@@ -217,7 +217,7 @@ def get_ll_cruise_performance_data(
 
 
 def get_ml_cruise_performance_data(
-    operation: JetOperation, flight_level: int
+    operation: JetOperation, flight_level: int,
 ) -> MLCruisePerformanceData:
     """Retrieves mid-level cruise performance data for a given operation and flight level.
 
@@ -333,7 +333,7 @@ def load_df(operation):
     try:
         df = pd.read_csv(file_path)
     except Exception as e:
-        raise ValueError(f"Error reading CSV file: {e}")
+        raise ValueError(f"Error reading CSV file: {e}") from e
     return df
 
 

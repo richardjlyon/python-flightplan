@@ -3,8 +3,8 @@
 import pytest
 
 from src.route_processor.transit_planner import (
-    _compute_transit_segments,
     TransitBuilder,
+    _compute_transit_segments,
 )
 
 

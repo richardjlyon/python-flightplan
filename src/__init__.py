@@ -6,6 +6,7 @@ the system's default application directory.
 """
 
 from pathlib import Path
+
 import typer
 
 app_name = "FlightPlan"

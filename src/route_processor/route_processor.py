@@ -9,11 +9,10 @@ from copy import deepcopy
 from src.deserialisers.little_navmap import Waypoint
 from src.route_processor.geo import Segment
 from src.route_processor.transit_planner import (
-    _compute_transit_segments,
     TransitBuilder,
+    _compute_transit_segments,
 )
 from src.route_processor.utils import mins_secs_str
-
 
 # --Public methods-----------------------------------------------------------------
 
@@ -181,7 +180,7 @@ def process_route(route: list[Waypoint], config: ProcessorConfig) -> list[Waypoi
             *transit_wps.intermediate_wps,
             transit_wps.tod_wp,
             transit_wps.end_wp,
-        ]
+        ],
     )
 
     # Route WPs
@@ -191,7 +190,7 @@ def process_route(route: list[Waypoint], config: ProcessorConfig) -> list[Waypoi
         [
             element.copy() if isinstance(element, dict) else element
             for element in route_wps
-        ]
+        ],
     )
 
     return processed_wps
@@ -201,7 +200,7 @@ def process_route(route: list[Waypoint], config: ProcessorConfig) -> list[Waypoi
 
 
 def _compute_route_wps(
-    route: list[Waypoint], config: ProcessorConfig
+    route: list[Waypoint], config: ProcessorConfig,
 ) -> list[Waypoint]:
     """Compute the route waypoints."""
     route_wps = []
@@ -209,7 +208,7 @@ def _compute_route_wps(
     cum_time_secs = 0
     wp_idx = 1
 
-    for this_segment, next_segment in zip(segments, segments[1:]):
+    for this_segment, next_segment in zip(segments, segments[1:], strict=False):
         segment_time_secs = this_segment.travel_time_secs(config.route_airspeed_kts)
         cum_time_secs += segment_time_secs
         departure_brg = next_segment.magnetic_bearing
@@ -232,7 +231,7 @@ def _compute_route_wps(
 
 
 def _compute_route_segments(
-    route: list[Waypoint], config: ProcessorConfig
+    route: list[Waypoint], config: ProcessorConfig,
 ) -> list[Segment]:
     """Compute the segments of the route from the config data."""
     segments = []
