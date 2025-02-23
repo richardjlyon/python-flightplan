@@ -5,6 +5,7 @@ A class for representing processor configuration, and serialising and deserialis
 import dataclasses
 from pathlib import Path
 from typing import Optional
+
 import toml
 
 
@@ -12,8 +13,8 @@ import toml
 class ProcessorConfig:
     id_entry: Optional[int] = None  # Low Level Entry Point waypoint index
     id_exit: Optional[int] = None  # Low Level Exit Point waypoint index
-    transit_groundspeed_kts: int = 495  # Average transit groundspeed @ M0.75
-    route_airspeed_kts: int = 420  # Target route airspeed
+    route_airspeed_kts: Optional[int] = None  # Low level route airspeed (knots)
+    transit_airspeed_kts: int = 495  # Average transit groundspeed @ M0.75
     route_alt_ft: int = 500  # Low Level Route altitude
 
 

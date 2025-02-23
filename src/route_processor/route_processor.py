@@ -32,7 +32,7 @@ def process_route(route: List[Waypoint], config: ProcessorConfig) -> List[Waypoi
     transit_segments = _compute_transit_segments(route, config.id_entry)
     builder = TransitBuilder(
         transit_segments,
-        config.transit_groundspeed_kts,
+        config.transit_airspeed_kts,
         config.route_alt_ft,
         departure_bearing_mag,
     )

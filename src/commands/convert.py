@@ -17,6 +17,9 @@ def convert(
     file_path: Annotated[
         Path, typer.Argument(help="The filepath of the file to convert")
     ],
+    airspeed_kts: Annotated[
+        int, typer.Option(help="Low level airspeed in knots")
+    ] = 420,
     verbose: bool = False,
 ):
     """Convert the given plan"""
@@ -24,10 +27,13 @@ def convert(
 
     # Load the plan and get low level entry and exit points
     plan = load_plan(file_path)
-    entry_id, exit_id = get_entry_exit_ids(plan)
-    config = generate_config(entry_id, exit_id)
     waypoints = plan.Flightplan.Waypoints
+
+    entry_id, exit_id = get_entry_exit_ids(plan)
+    config = generate_config(entry_id, exit_id, airspeed_kts)
+
     processed_route_wps = process_route(waypoints, config)
+
     plan.Flightplan.Waypoints = processed_route_wps
     save_to_disk(file_path, plan)
 
@@ -91,11 +97,13 @@ def get_entry_exit_ids(plan) -> Tuple[int, int]:
     return entry_idx, exit_idx
 
 
-def generate_config(entry_id, exit_id):
+def generate_config(entry_id, exit_id, airspeed_kts):
     config_path = get_config_path()
     config = deserialize_from_toml_file(ProcessorConfig, config_path)
     config.id_entry = entry_id
     config.id_exit = exit_id
+    config.route_airspeed_kts = airspeed_kts
+
     return config
 
 

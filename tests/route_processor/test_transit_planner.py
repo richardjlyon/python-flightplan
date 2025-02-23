@@ -12,7 +12,7 @@ def transit_builder(route, config):
     departure_bearing_mag = 999
     return TransitBuilder(
         transit_segments,
-        config.transit_groundspeed_kts,
+        config.transit_airspeed_kts,
         config.route_alt_ft,
         departure_bearing_mag,
     )
