@@ -1,8 +1,9 @@
+"""The convert command."""
+
 from pathlib import Path
-from typing import Tuple
 
 import typer
-from typing_extensions import Annotated
+from typing import Annotated
 
 from src.deserialisers.little_navmap import LittleNavmap
 from src.route_processor.route_processor import process_route, ProcessorConfig
@@ -20,7 +21,17 @@ def convert(
     ] = 420,
     verbose: bool = False,
 ):
-    """Convert the given plan"""
+    """Converts the input flight plan file by processing defined routes and waypoints.
+
+    Parameters:
+        file_path (Path): The filepath of the flight plan file to convert.
+        transit_airspeed_kts (int): The transit airspeed in knots (default is 495).
+        route_airspeed_kts (int): The low-level route airspeed in knots (default is 420).
+        verbose (bool): If True, outputs additional details about the processed route.
+
+    Returns:
+        None
+    """
     typer.echo(f"\nConverting {file_path}")
 
     # Load the plan and get low level entry and exit points
@@ -47,6 +58,14 @@ def convert(
 
 
 def report(processed_route_wps):
+    """Displays a detailed report of the processed waypoints.
+
+    Parameters:
+        processed_route_wps (list): A list of waypoints, each containing name, identifier, altitude, and comments.
+
+    Returns:
+        None
+    """
     print()
     print(f"{'Name':<14} | {'Ident':<15} | {'Alt':<5} | {'Comment':<21}")
     print("-" * 55)
@@ -57,6 +76,18 @@ def report(processed_route_wps):
 
 
 def save_to_disk(file_path, plan):
+    """Saves the updated flight plan to disk.
+
+    Parameters:
+        file_path (Path): The original filepath of the flight plan.
+        plan: The processed flight plan object to save.
+
+    Raises:
+        typer.Exit: If an error occurs during the file write operation.
+
+    Returns:
+        None
+    """
     outfile = file_path.with_name(file_path.stem + " [processed]" + file_path.suffix)
     try:
         plan.write(outfile)
@@ -67,6 +98,17 @@ def save_to_disk(file_path, plan):
 
 
 def load_plan(file_path):
+    """Reads and loads the flight plan file.
+
+    Parameters:
+        file_path (Path): The filepath of the flight plan file.
+
+    Raises:
+        typer.Exit: If an error occurs during the file read operation.
+
+    Returns:
+        plan: The loaded flight plan object.
+    """
     try:
         plan = LittleNavmap.read(file_path)
 
@@ -76,7 +118,18 @@ def load_plan(file_path):
     return plan
 
 
-def get_entry_exit_ids(plan) -> Tuple[int, int]:
+def get_entry_exit_ids(plan) -> tuple[int, int]:
+    """Prompts the user to select entry and exit waypoint indices for route processing.
+
+    Parameters:
+        plan: The loaded flight plan object containing waypoints.
+
+    Returns:
+        tuple[int, int]: The indices of the selected entry and exit waypoints.
+
+    Notes:
+        The function validates user input to ensure values are within the range of available waypoint indices.
+    """
     typer.echo("\nWaypoints in the plan:")
     print(f"{'Index':<6} | {'Name':<14} | {'Ident':<15} | {'Alt':<5} | {'Comment':<21}")
     print("-" * 70)
@@ -102,8 +155,18 @@ def get_entry_exit_ids(plan) -> Tuple[int, int]:
 
 
 def validate_index(value: str, min_value: int, max_value: int) -> int:
-    """
-    Validate that the input is a positive integer.
+    """Validates and converts a string input to an integer within the specified range.
+
+    Parameters:
+        value (str): The input value to validate.
+        min_value (int): The minimum allowed value.
+        max_value (int): The maximum allowed value.
+
+    Returns:
+        int: The validated and converted value.
+
+    Raises:
+        typer.BadParameter: If the input is not a valid integer or is out of range.
     """
     try:
         number = int(value)

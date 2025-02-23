@@ -1,3 +1,5 @@
+"""Testing fixtures."""
+
 import pytest
 
 from src.deserialisers.little_navmap import Waypoint, Pos

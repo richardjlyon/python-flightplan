@@ -27,6 +27,14 @@ packages = ["src", "src.deserialisers", "src.route_processor", "src.utils"]
 format.quote-style = "double"
 format.docstring-code-format = true
 
+[tool.ruff.lint]
+extend-select = [
+    "UP", # pyupgrade
+    "D", # pydocstyle
+]
+
+[tool.ruff.lint.pydocstyle]
+convention = "google"
 
 [dependency-groups]
 dev = [

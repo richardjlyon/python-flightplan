@@ -1,3 +1,5 @@
+"""Transit planner tests."""
+
 import pytest
 
 from src.route_processor.transit_planner import (
@@ -8,6 +10,7 @@ from src.route_processor.transit_planner import (
 
 @pytest.fixture
 def transit_builder(route, config):
+    """A transit builder fixture."""
     transit_segments = _compute_transit_segments(route, config.id_entry)
     departure_bearing_mag = 999
     return TransitBuilder(
@@ -19,7 +22,10 @@ def transit_builder(route, config):
 
 
 class TestTransitBuilder:
+    """Transit builder public method tests."""
+
     def test_start(self, transit_builder):
+        """Tests that it builds a start waypoint."""
         transit = transit_builder.set_start().build()
         wp = transit.start_wp
 
@@ -30,6 +36,7 @@ class TestTransitBuilder:
         assert wp.Pos.Alt == 266
 
     def test_toc(self, transit_builder):
+        """Tests that it builds a Top of Climb waypoint."""
         transit = transit_builder.set_toc().build()
         wp = transit.toc_wp
 
@@ -41,6 +48,7 @@ class TestTransitBuilder:
         assert wp.Pos.Alt == 20000
 
     def test_intermediate_wps(self, transit_builder):
+        """Tests that it builds intermediate waypoints."""
         transit = transit_builder.set_intermediate_wps().build()
         wps = transit.intermediate_wps
 
@@ -54,6 +62,7 @@ class TestTransitBuilder:
         assert wp.Pos.Alt == 20000
 
     def test_tod(self, transit_builder):
+        """Tests that it builds a Top of Descent waypoint."""
         transit = transit_builder.set_tod().build()
         wp = transit.tod_wp
 
@@ -65,6 +74,7 @@ class TestTransitBuilder:
         assert wp.Pos.Alt == 20000
 
     def test_end(self, transit_builder):
+        """Tests that it builds an end of transit waypoint."""
         transit = transit_builder.set_toc().set_tod().set_end().build()
         wp = transit.end_wp
 
@@ -77,5 +87,8 @@ class TestTransitBuilder:
 
 
 class TestTransitBuilderUtilities:
+    """Tests private utilities."""
+
     def test_flight_level(self, transit_builder):
+        """Tests that it computes the flight level correctly."""
         assert transit_builder.flight_level == 200

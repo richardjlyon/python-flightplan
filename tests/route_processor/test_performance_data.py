@@ -1,3 +1,5 @@
+"""Performance data tests."""
+
 import pytest
 
 from src.route_processor.performance_data import (
@@ -57,6 +59,7 @@ from src.route_processor.performance_data import (
     ],
 )
 def test_climb_descent(operation, fl, expected):
+    """Tests that the climb descent performance data is computed correctly."""
     result = get_climb_descent_performance_data(operation, fl)
     assert result == expected
 
@@ -91,6 +94,7 @@ def test_climb_descent(operation, fl, expected):
     ],
 )
 def test_ll_cruise(operation, kts, expected):
+    """Tests that low level cruise performance data is computed correctly."""
     result = get_ll_cruise_performance_data(operation, kts)
     assert result == expected
 
@@ -119,5 +123,6 @@ def test_ll_cruise(operation, kts, expected):
     ],
 )
 def test_ml_cruise(operation, fl, expected):
+    """Tests that medium level cruise performance data is computed correctly."""
     result = get_ml_cruise_performance_data(operation, fl)
     assert result == expected
